@@ -1,0 +1,1494 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Long Haul Case Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&display=swap">
+<style>
+/* Layout concept: full-width "highway signage" bands — a sticky route strip on top, each section opens with a numbered route shield, content sits on a 12-column grid that folds to one column on phones. */
+:root{
+  --bg:#F3F5F6; --surface:#FFFFFF; --surface-2:#E9EEF0; --ink:#14202A; --muted:#566573; --line:#D3DBE0;
+  --accent:#0A7480; --accent-ink:#FFFFFF; --accent-soft:#D5ECEE; --amber:#B9770E; --amber-soft:#F5E6C6;
+  --good:#2C7A51; --good-soft:#DCEFE4; --bad:#B83A2E; --bad-soft:#F6DEDA; --warn:#A86B12; --warn-soft:#F7EBD2;
+  --display:"Readex Pro","IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  --body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --gutter:clamp(16px,2.6vw,44px);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1419; --surface:#141E25; --surface-2:#1B2831; --ink:#E3EAEF; --muted:#9AA9B5; --line:#2A3945;
+  --accent:#3DBAC4; --accent-ink:#06262A; --accent-soft:#123339; --amber:#E6A63A; --amber-soft:#3A2D14;
+  --good:#52B985; --good-soft:#14301F; --bad:#E5705F; --bad-soft:#3B1A16; --warn:#E2A94A; --warn-soft:#382B12; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0D1419; --surface:#141E25; --surface-2:#1B2831; --ink:#E3EAEF; --muted:#9AA9B5; --line:#2A3945;
+  --accent:#3DBAC4; --accent-ink:#06262A; --accent-soft:#123339; --amber:#E6A63A; --amber-soft:#3A2D14;
+  --good:#52B985; --good-soft:#14301F; --bad:#E5705F; --bad-soft:#3B1A16; --warn:#E2A94A; --warn-soft:#382B12; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.75}
+.page{direction:rtl;text-align:right}
+bdi{unicode-bidi:isolate}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.35;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.45rem,1.1rem + 1.2vw,2.05rem);font-weight:700}
+h3{font-size:1.15rem;font-weight:600}
+h4{font-size:1rem;font-weight:600}
+p{margin:0}
+.num,.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+small,.small{font-size:.86rem}
+.muted{color:var(--muted)}
+
+/* route strip nav */
+.strip{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ink);color:var(--bg)}
+.strip-in{display:flex;gap:6px;align-items:center;overflow-x:auto;padding-block:8px;padding-inline:var(--gutter);scrollbar-width:thin}
+.strip a{color:inherit;text-decoration:none;white-space:nowrap;font-size:.86rem;padding:4px 10px;border-radius:6px;opacity:.82;display:flex;gap:6px;align-items:center}
+.strip a:hover{opacity:1;background:color-mix(in srgb,var(--bg) 14%,transparent)}
+.strip a.on{opacity:1;background:var(--accent);color:var(--accent-ink)}
+.strip .k{font-family:var(--mono);font-size:.74rem;opacity:.75}
+.strip .brand{font-family:var(--display);font-weight:600;white-space:nowrap;padding-inline-end:10px;margin-inline-end:4px;border-inline-end:1px solid color-mix(in srgb,var(--bg) 30%,transparent)}
+
+.wrap{padding-inline:var(--gutter)}
+section.band{padding-block:clamp(28px,4vw,56px);border-bottom:1px solid var(--line)}
+.sec-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px}
+.shield{flex:none;width:52px;height:56px;background:var(--accent);color:var(--accent-ink);font-family:var(--mono);font-weight:600;font-size:1.25rem;display:grid;place-items:center;clip-path:polygon(0 0,100% 0,100% 72%,50% 100%,0 72%)}
+.sec-head p{color:var(--muted);max-width:110ch;margin-top:6px}
+.lane{height:0;border-top:3px dashed var(--amber);opacity:.55;margin-block:26px}
+
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px}
+.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c9{grid-column:span 9}.c12{grid-column:span 12}
+@media (max-width:1200px){.c3{grid-column:span 6}.c4{grid-column:span 6}.c5,.c7{grid-column:span 12}}
+@media (max-width:860px){.grid>*{grid-column:span 12 !important}}
+.grid>*{min-width:0}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.card.flat{background:transparent;border:none;padding:0}
+.card h3{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card ul,.card ol{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:4px}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tag{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:.72rem;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.q{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.tag.good{background:var(--good-soft);color:var(--good);border-color:transparent}
+.tag.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.tag.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.callout{border-inline-start:4px solid var(--amber);background:var(--amber-soft);padding:12px 16px;border-radius:6px}
+.callout.teal{border-color:var(--accent);background:var(--accent-soft)}
+.callout.red{border-color:var(--bad);background:var(--bad-soft)}
+.callout b{font-weight:600}
+
+/* hero */
+.hero{padding-block:clamp(30px,5vw,64px) clamp(22px,3vw,40px);background:var(--surface);border-bottom:1px solid var(--line)}
+.hero h1{font-size:clamp(1.9rem,1.2rem + 2.6vw,3.3rem);font-weight:700;letter-spacing:-.01em}
+.hero h1 .en{font-family:var(--display);color:var(--accent)}
+.hero .lede{font-size:1.08rem;color:var(--muted);max-width:105ch;margin-top:12px}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:26px}
+@media (max-width:1200px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:700px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:420px){.kpis{grid-template-columns:1fr}}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--bg);display:flex;flex-direction:column;gap:4px;min-width:0}
+.kpi .v{font-family:var(--mono);font-weight:600;font-size:clamp(1.35rem,1rem + 1vw,1.85rem);color:var(--ink);direction:ltr;text-align:right;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:.86rem;color:var(--muted)}
+.kpi.hl{background:var(--accent);border-color:var(--accent)}
+.kpi.hl .v,.kpi.hl .l,.kpi.hl .tag{color:var(--accent-ink)}
+.kpi.hl .tag{border-color:color-mix(in srgb,var(--accent-ink) 40%,transparent);background:transparent}
+.dates{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.date{display:flex;gap:10px;align-items:center;border:1px dashed var(--line);border-radius:8px;padding:8px 12px;font-size:.9rem}
+.date b{font-family:var(--mono);color:var(--accent)}
+.date .cd{font-family:var(--mono);font-size:.8rem;color:var(--amber)}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}
+thead th{background:var(--surface-2);font-family:var(--display);font-weight:600;font-size:.86rem;position:sticky;top:0}
+tbody tr:last-child td{border-bottom:none}
+td.n,th.n{text-align:left;direction:ltr;white-space:nowrap}
+tr.total td{font-weight:600;background:var(--accent-soft)}
+tr.hl td{background:var(--amber-soft)}
+
+/* charts */
+.chart{position:relative;width:100%;height:320px}
+.chart.tall{height:380px}.chart.short{height:240px}
+.chart canvas{position:absolute;inset:0}
+.cap{font-size:.82rem;color:var(--muted)}
+.src{font-size:.78rem;color:var(--muted);font-family:var(--mono)}
+
+/* chain diagram */
+.chain{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+.node{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:10px 12px;min-width:110px;flex:1 1 120px;display:flex;flex-direction:column;gap:2px}
+.node .v{font-family:var(--mono);font-weight:600;font-size:1.05rem;direction:ltr;text-align:right}
+.node .l{font-size:.8rem;color:var(--muted)}
+.node.out{background:var(--accent);border-color:var(--accent)}
+.node.out .v,.node.out .l{color:var(--accent-ink)}
+.op{align-self:center;font-family:var(--mono);color:var(--amber);font-weight:600;font-size:1.1rem;flex:none}
+
+/* deal diagram */
+.stack{display:flex;flex-direction:column;gap:0;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.stack div{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;font-size:.92rem;gap:10px}
+.stack .pre{background:var(--surface-2);min-height:120px}
+.stack .new{background:var(--accent);color:var(--accent-ink);min-height:36px}
+.bar-pair{display:flex;flex-direction:column;gap:8px}
+.bp{display:grid;grid-template-columns:110px 1fr 70px;gap:10px;align-items:center;font-size:.88rem}
+.bp .track{height:14px;background:var(--surface-2);border-radius:7px;overflow:hidden;direction:ltr}
+.bp .fill{height:100%;background:var(--accent);border-radius:7px}
+.bp .fill.amber{background:var(--amber)}
+.bp .v{font-family:var(--mono);direction:ltr;text-align:left}
+
+/* 2x2 */
+.matrix{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr auto;gap:6px;min-height:300px}
+.mx{border-radius:8px;padding:10px 12px;font-size:.86rem;display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);background:var(--surface)}
+.mx.go{background:var(--good-soft);border-color:transparent}
+.mx.no{background:var(--bad-soft);border-color:transparent}
+.mx.trap{background:var(--warn-soft);border-color:transparent}
+.mx .pin{font-family:var(--mono);font-size:.75rem;background:var(--ink);color:var(--bg);padding:2px 8px;border-radius:999px;align-self:flex-start}
+.ax{font-size:.74rem;color:var(--muted);display:grid;place-items:center;text-align:center}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+@media (max-width:1000px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:4px;font-size:.86rem}
+.step .sn{font-family:var(--mono);color:var(--accent);font-weight:600}
+.step b{font-family:var(--display);font-weight:600;font-size:.92rem}
+
+/* pyramid */
+.pyr{display:flex;flex-direction:column;align-items:center;gap:6px}
+.pyr div{border-radius:6px;padding:10px 14px;text-align:center;font-size:.88rem}
+.pyr .gt{background:var(--accent);color:var(--accent-ink);width:min(560px,100%);font-weight:600}
+.pyr .kl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;width:min(900px,100%);padding:0}
+.pyr .kl div{background:var(--accent-soft);color:var(--ink)}
+.pyr .sp{background:var(--surface-2);width:100%;color:var(--muted)}
+@media (max-width:700px){.pyr .kl{grid-template-columns:1fr 1fr}}
+
+/* ladder */
+.ladder{display:flex;flex-direction:column;gap:6px}
+.rung{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;border-radius:8px;padding:8px 12px;background:var(--surface);border:1px solid var(--line);font-size:.88rem}
+.rung .who{font-family:var(--display);font-weight:600}
+.rung .meter{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden;direction:ltr;margin-top:4px}
+.rung .meter i{display:block;height:100%;background:var(--good)}
+
+/* heatmap */
+.heat td.n{font-weight:600}
+.h-hit{background:var(--good-soft);color:var(--good)}
+.h-near{background:var(--warn-soft);color:var(--warn)}
+.h-mid{background:var(--accent-soft);color:var(--accent)}
+.h-low{background:var(--bad-soft);color:var(--bad)}
+.h-ctr{outline:2px solid var(--ink);outline-offset:-2px}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+.calc .ins{grid-column:span 5;display:flex;flex-direction:column;gap:12px}
+.calc .outs{grid-column:span 7;display:flex;flex-direction:column;gap:12px}
+@media (max-width:900px){.calc .ins,.calc .outs{grid-column:span 12}}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:.88rem;display:flex;justify-content:space-between;gap:10px}
+.field label output{font-family:var(--mono);color:var(--accent);font-weight:600;direction:ltr}
+.field input[type=range]{width:100%;accent-color:var(--accent);direction:ltr}
+.field select,.field input[type=number]{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.res{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.res{grid-template-columns:1fr 1fr}}
+.res .kpi .v{font-size:1.25rem}
+
+/* gantt */
+.gantt{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.g{display:grid;grid-template-columns:170px repeat(6,minmax(110px,1fr));min-width:860px}
+.g>div{padding:8px 10px;border-bottom:1px solid var(--line);font-size:.84rem}
+.g .gh{background:var(--surface-2);font-family:var(--display);font-weight:600;text-align:center}
+.g .gh small{display:block;font-family:var(--mono);font-weight:400;color:var(--muted)}
+.g .who{font-family:var(--display);font-weight:600;display:flex;flex-direction:column}
+.g .who small{font-family:var(--body);font-weight:400;color:var(--muted)}
+.g .bar{margin:2px 0;border-radius:6px;padding:6px 8px;font-size:.8rem;line-height:1.45;background:var(--accent-soft);color:var(--ink);border-inline-start:3px solid var(--accent)}
+.g .bar.am{background:var(--amber-soft);border-color:var(--amber)}
+.g .bar.gd{background:var(--good-soft);border-color:var(--good)}
+.g .bar.rd{background:var(--bad-soft);border-color:var(--bad)}
+
+/* roles */
+.role{position:relative}
+.role .badge{font-family:var(--mono);font-size:.78rem;background:var(--ink);color:var(--bg);border-radius:6px;padding:2px 8px;align-self:flex-start}
+.role dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:.88rem}
+.role dt{color:var(--muted)}
+.role dd{margin:0}
+
+/* checklist */
+.check{display:flex;flex-direction:column;gap:6px}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;font-size:.9rem}
+.check input{margin-top:5px;accent-color:var(--good);flex:none}
+.check label:has(input:checked){background:var(--good-soft);border-color:transparent}
+.progress{height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;direction:ltr}
+.progress i{display:block;height:100%;width:0;background:var(--good);transition:width .3s}
+
+details{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:10px 14px}
+details+details{margin-top:8px}
+summary{cursor:pointer;font-family:var(--display);font-weight:600}
+details[open] summary{margin-bottom:8px}
+.btn{font:inherit;font-size:.86rem;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:6px 14px;border-radius:6px;cursor:pointer;align-self:flex-start}
+.btn.ghost{background:transparent;color:var(--accent)}
+pre.tpl{direction:ltr;text-align:left;white-space:pre-wrap;font-family:var(--mono);font-size:.82rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:12px;margin:0;overflow-x:auto}
+.legend-dots{display:flex;flex-wrap:wrap;gap:12px;font-size:.8rem;color:var(--muted)}
+.legend-dots span{display:inline-flex;align-items:center;gap:6px}
+.legend-dots i{width:10px;height:10px;border-radius:2px;display:inline-block}
+footer{padding-block:28px;color:var(--muted);font-size:.85rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+section[id]{scroll-margin-top:52px}
+.tabs main > section:not(.active){display:none}
+.tabs section.band{border-bottom:none;min-height:70vh}
+.toc{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;margin-top:26px}
+.toc a{display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.toc a:hover{border-color:var(--accent)}
+.toc .shield{width:36px;height:40px;font-size:.92rem}
+.toc b{font-family:var(--display);font-weight:600;display:block}
+.toc .d{font-size:.84rem;color:var(--muted);display:block}
+.team{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.team span{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.86rem;background:var(--bg)}
+.team span b{font-family:var(--display);font-weight:600;color:var(--accent)}
+.hint{font-size:.84rem;color:var(--muted);margin-top:10px}
+</style>
+
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="page" dir="rtl" lang="ar">
+
+<nav class="strip" aria-label="أقسام الدليل">
+  <div class="strip-in">
+    <span class="brand"><bdi>Round 1 · Long Haul</bdi></span>
+    <a href="#home"><span class="k"><bdi>00</bdi></span>الرئيسية</a>
+    <a href="#s1"><span class="k"><bdi>01</bdi></span>الحالة</a>
+    <a href="#s2"><span class="k"><bdi>02</bdi></span>الـ<bdi>Exhibits</bdi></a>
+    <a href="#s3"><span class="k"><bdi>03</bdi></span>بيانات الإكسل</a>
+    <a href="#s4"><span class="k"><bdi>04</bdi></span><bdi>Q1</bdi> السوق</a>
+    <a href="#s5"><span class="k"><bdi>05</bdi></span><bdi>Q2</bdi> الاستثمار</a>
+    <a href="#s6"><span class="k"><bdi>06</bdi></span><bdi>Q3</bdi> القيمة</a>
+    <a href="#s7"><span class="k"><bdi>07</bdi></span><bdi>Q4</bdi> التوصية</a>
+    <a href="#s8"><span class="k"><bdi>08</bdi></span>الأدلة المخفية</a>
+    <a href="#s9"><span class="k"><bdi>09</bdi></span>أحكام المنظّمين</a>
+    <a href="#s10"><span class="k"><bdi>10</bdi></span>دروس الورش</a>
+    <a href="#s11"><span class="k"><bdi>11</bdi></span>العرض والإكسل</a>
+    <a href="#s12"><span class="k"><bdi>12</bdi></span>خطة العمل</a>
+    <a href="#s13"><span class="k"><bdi>13</bdi></span>الدفاع والفخاخ</a>
+    <a href="#s14"><span class="k"><bdi>14</bdi></span>المسرد والمصادر</a>
+    <a href="#s15"><span class="k"><bdi>15</bdi></span>تدقيق المصادر</a>
+  </div>
+</nav>
+
+<main>
+<section class="hero wrap" id="home">
+  <div class="eyebrow"><bdi>Aramco Consulting Case Championship 2026 · Round 1 · AlixPartners case</bdi></div>
+  <h1 style="margin-top:8px">دليل الفريق لحالة <span class="en"><bdi>Charging the Long Haul</bdi></span></h1>
+  <p class="lede">كل ما في ملف الحالة (<bdi>23</bdi> صفحة) وملف الإكسل (<bdi>7</bdi> تبويبات) و<bdi>9</bdi> فيديوهات (<bdi>14.4</bdi> ساعة) مرتّبًا في <bdi>15</bdi> صفحة مستقلة: ماذا تقول البيانات، ماذا قال المنظّمون، كيف نحل الأسئلة الأربعة، ومن يفعل ماذا حتى <bdi>12</bdi> أكتوبر.</p>
+  <div class="kpis">
+    <div class="kpi"><span class="tag q"><bdi>Q1</bdi></span><span class="v"><bdi>~60,000</bdi></span><span class="l">شاحنة لنقل <bdi>300M</bdi> طن سنويًا ⇐ سوق تأجير <b class="n"><bdi>~$3.3B</bdi></b> في السنة</span></div>
+    <div class="kpi"><span class="tag q"><bdi>Q2</bdi></span><span class="v"><bdi>~$888M</bdi></span><span class="l">استثمار إجمالي لخطة الإدارة (نطاق <span class="n"><bdi>$848–928M</bdi></span>)؛ الـ<span class="n"><bdi>$120M</bdi></span> تغطي السنة <bdi>1</bdi> تقريبًا</span></div>
+    <div class="kpi"><span class="tag q"><bdi>Q3</bdi></span><span class="v"><bdi>~$400–410M</bdi></span><span class="l">قيمة <bdi>Rakiza</bdi> اليوم مقابل <b class="n"><bdi>$480M</bdi></b> <bdi>pre-money</bdi> يفترضها الطلب</span></div>
+    <div class="kpi"><span class="tag warn"><bdi>Plan test</bdi></span><span class="v"><bdi>60%</bdi> → <bdi>70%</bdi></span><span class="l">الـ<bdi>hub</bdi> تتعادل عند <bdi>60%</bdi> استخدام، وخطة الإدارة تحتاج <bdi>~70%</bdi> في كل الـ<bdi>45 hub</bdi></span></div>
+    <div class="kpi hl"><span class="tag"><bdi>Q4</bdi></span><span class="v"><bdi>Yes, staged</bdi></span><span class="l">نعم مشروطة ومرحلية: تقييم أقل، شرائح مرتبطة بالاستخدام، حماية من التخفيف</span></div>
+  </div>
+  <div class="dates">
+    <div class="date"><b><bdi>07 Oct · 17:00</bdi></b><span>جلسة <bdi>Q&amp;A</bdi> الثالثة والأخيرة (بتوقيت السعودية)</span><span class="cd" data-cd="2026-10-07T17:00:00+03:00"></span></div>
+    <div class="date"><b><bdi>09 Oct</bdi></b><span>يفتح رابط التسليم</span><span class="cd" data-cd="2026-10-09T00:00:00+03:00"></span></div>
+    <div class="date"><b><bdi>12 Oct · 23:59</bdi></b><span>آخر موعد للتسليم، وتسليم واحد فقط</span><span class="cd" data-cd="2026-10-12T23:59:00+03:00"></span></div>
+  </div>
+  <p class="small muted" style="margin-top:14px">كل الأرقام مبنية من بيانات الحالة فقط وهي نقطة انطلاق للفريق، لا إجابة نهائية. ما هو "رأي الفريق" أو "افتراض" معنون كذلك. تحققوا من كل رقم في ملف الإكسل الخاص بكم قبل اعتماده.</p>
+  <div class="team" aria-label="توزيع الفريق">
+    <span><b>سلام</b> القائد: القصة و<bdi>Q4</bdi></span>
+    <span><b>لؤي</b> <bdi>Q1 + Q2</bdi></span>
+    <span><b>مهند</b> التشغيل: الـ<bdi>hubs</bdi> والمحطات</span>
+    <span><b>مجد</b> <bdi>Q3</bdi>: التقييم والصفقة</span>
+    <span><b>يوسف</b> العرض والجودة</span>
+  </div>
+  <div class="toc">
+    <a href="#s1"><span class="shield"><bdi>01</bdi></span><span><b>الحالة في دقيقتين</b><span class="d">الأطراف، الطلب، الأسئلة الأربعة، معايير التقييم</span></span></a>
+    <a href="#s2"><span class="shield"><bdi>02</bdi></span><span><b>الـ<bdi>Exhibits</bdi></b><span class="d">ماذا يخدم كل <bdi>Exhibit</bdi> والدليل المخفي فيه</span></span></a>
+    <a href="#s3"><span class="shield"><bdi>03</bdi></span><span><b>بيانات الإكسل</b><span class="d">عن ماذا يعبّر كل تبويب، مع الرسوم والفخاخ</span></span></a>
+    <a href="#s4"><span class="shield"><bdi>04</bdi></span><span><b><bdi>Q1</bdi> السوق</b><span class="d">طريقتان تلتقيان عند <bdi>60,000</bdi> شاحنة</span></span></a>
+    <a href="#s5"><span class="shield"><bdi>05</bdi></span><span><b><bdi>Q2</bdi> الاستثمار</b><span class="d"><bdi>~$888M</bdi>، والـ<bdi>$120M</bdi> تغطي السنة <bdi>1</bdi> تقريبًا</span></span></a>
+    <a href="#s6"><span class="shield"><bdi>06</bdi></span><span><b><bdi>Q3</bdi> القيمة</b><span class="d">السلسلة، المصفوفة، والحاسبة التفاعلية</span></span></a>
+    <a href="#s7"><span class="shield"><bdi>07</bdi></span><span><b><bdi>Q4</bdi> التوصية</b><span class="d">الخيارات، الشروط، الممرات، المخاطر</span></span></a>
+    <a href="#s8"><span class="shield"><bdi>08</bdi></span><span><b>الأدلة المخفية</b><span class="d"><bdi>15</bdi> دليلًا تكسب نقاط الحكم التجاري</span></span></a>
+    <a href="#s9"><span class="shield"><bdi>09</bdi></span><span><b>أحكام المنظّمين</b><span class="d">ما حُسم في الفيديوهات مع التوقيت</span></span></a>
+    <a href="#s10"><span class="shield"><bdi>10</bdi></span><span><b>دروس الورش</b><span class="d">الورش الست وتطبيقها على حالتنا</span></span></a>
+    <a href="#s11"><span class="shield"><bdi>11</bdi></span><span><b>العرض والإكسل</b><span class="d"><bdi>Storyline</bdi>، هيكل الملف، قائمة التسليم</span></span></a>
+    <a href="#s12"><span class="shield"><bdi>12</bdi></span><span><b>خطة العمل</b><span class="d">من يفعل ماذا ومتى، من <bdi>7</bdi> إلى <bdi>12</bdi> أكتوبر</span></span></a>
+    <a href="#s13"><span class="shield"><bdi>13</bdi></span><span><b>الدفاع والفخاخ</b><span class="d">أسئلة متوقعة وأخطاء يجب تجنبها</span></span></a>
+    <a href="#s14"><span class="shield"><bdi>14</bdi></span><span><b>المسرد والمصادر</b><span class="d">المصطلحات وقائمة الفيديوهات المفرّغة</span></span></a>
+    <a href="#s15"><span class="shield"><bdi>15</bdi></span><span><b>تدقيق المصادر</b><span class="d">من أين جاء كل رقم، وما هو مشتق أو رأي فريق</span></span></a>
+  </div>
+  <p class="hint">تنقّلوا بين الصفحات من الشريط العلوي أو من بطاقات الفهرس أعلاه، أو بأسهم لوحة المفاتيح ← →.</p>
+</section>
+
+<!-- ============ 1. SITUATION ============ -->
+<section class="band wrap" id="s1">
+  <div class="sec-head"><div class="shield"><bdi>01</bdi></div><div><h2>الحالة في دقيقتين</h2><p>شركة ناشئة تطلب مالًا، ومستثمر عائلي كبير يريد أن يعرف هل يدفع وبأي شروط. دورنا: مستشارو <bdi>Qafila</bdi>.</p></div></div>
+  <div class="grid">
+    <div class="card c4">
+      <div class="eyebrow"><bdi>The company</bdi></div>
+      <h3><bdi>Rakiza Freight</bdi></h3>
+      <p>شركة سعودية ناشئة بنشاطين:</p>
+      <ul>
+        <li><b>تأجير شاحنات كهربائية ثقيلة بخدمة كاملة</b>: حوالي <span class="n"><bdi>$55,000</bdi></span> للشاحنة سنويًا، والكهرباء تُفوتر منفصلة. الصيانة داخل السعر.</li>
+        <li><b>محطات شحن <bdi>(hubs)</bdi></b> للشاحنات على الطرق الرئيسية: <bdi>5 hubs</bdi> تجريبية تشحن شاحنات <bdi>Rakiza</bdi> وبشكل متزايد شاحنات الآخرين.</li>
+      </ul>
+      <p class="small muted">شعار المؤسس: "<bdi>building the energy layer for freight, not a row of chargers</bdi>".</p>
+    </div>
+    <div class="card c4">
+      <div class="eyebrow"><bdi>The investor (our client)</bdi></div>
+      <h3><bdi>Qafila Mobility Group</bdi></h3>
+      <ul>
+        <li><b>وقود وتجزئة:</b> أكثر من <bdi>850</bdi> محطة، حصة سوقية "<bdi>mid-teens</bdi>" كما تصفها الحالة. الديزل من أكثر المنتجات مبيعًا.</li>
+        <li><b>مركبات تجارية:</b> وكيل وورش لعلامة شاحنات ديزل، وعلاقات مع معظم الأساطيل الكبيرة.</li>
+        <li><b><bdi>Qafila Capital</bdi>:</b> تستطيع ضخ حتى <span class="n"><bdi>$120M</bdi></span> الآن، والمزيد لاحقًا "إذا ثبتت الحالة".</li>
+      </ul>
+      <div class="chain" style="margin-top:4px">
+        <div class="node"><span class="v"><bdi>$5B</bdi></span><span class="l">إيراد المجموعة</span></div>
+        <div class="node"><span class="v"><bdi>$520M</bdi></span><span class="l">ربح تشغيلي</span></div>
+        <div class="node"><span class="v"><bdi>$360M</bdi></span><span class="l">صافي الربح</span></div>
+      </div>
+    </div>
+    <div class="card c4">
+      <div class="eyebrow"><bdi>The ask</bdi></div>
+      <h3><bdi>$120M</bdi> مقابل <bdi>20%</bdi></h3>
+      <div class="stack" aria-label="هيكل الطلب">
+        <div class="new"><span>المال الجديد من <bdi>Qafila</bdi></span><b class="n"><bdi>$120M = 20%</bdi></b></div>
+        <div class="pre"><span>قيمة <bdi>Rakiza</bdi> قبل المال الجديد <bdi>(Pre-money)</bdi></span><b class="n"><bdi>$480M = 80%</bdi></b></div>
+      </div>
+      <p class="small">المجموع = <b class="n"><bdi>$600M Post-money</bdi></b>. القاعدة: <bdi>Post</bdi> = <span class="n"><bdi>120 ÷ 20%</bdi></span>، <bdi>Pre</bdi> = <span class="n"><bdi>600 − 120</bdi></span>. نقارن قيمتنا في <bdi>Q3</bdi> بالـ<b class="n"><bdi>$480M</bdi></b>.</p>
+      <p class="small muted"><bdi>Q&amp;A 1</bdi> قال "<bdi>pre-money $600M</bdi>" ثم صُحّح رسميًا في <bdi>Q&amp;A 2</bdi>: كان خطأً مطبعيًا.</p>
+    </div>
+
+    <div class="card c6">
+      <h3>من اليوم إلى السنة <bdi>5</bdi> (خطة الإدارة)</h3>
+      <div class="bar-pair">
+        <div class="bp"><span>شاحنات مؤجرة</span><div class="track"><div class="fill" style="width:23.6%"></div></div><span class="v"><bdi>850</bdi></span></div>
+        <div class="bp"><span></span><div class="track"><div class="fill" style="width:100%"></div></div><span class="v"><bdi>3,600</bdi></span></div>
+        <div class="bp"><span><bdi>hubs</bdi> تجارية</span><div class="track"><div class="fill amber" style="width:11.1%"></div></div><span class="v"><bdi>5</bdi></span></div>
+        <div class="bp"><span></span><div class="track"><div class="fill amber" style="width:100%"></div></div><span class="v"><bdi>45</bdi></span></div>
+        <div class="bp"><span>الإيراد</span><div class="track"><div class="fill" style="width:24.9%"></div></div><span class="v"><bdi>$90M Y1</bdi></span></div>
+        <div class="bp"><span></span><div class="track"><div class="fill" style="width:100%"></div></div><span class="v"><bdi>$361M Y5</bdi></span></div>
+      </div>
+      <p class="small muted">الأسطول ×<bdi>4.2</bdi>، الـ<bdi>hubs ×9</bdi>، الإيراد ×<bdi>4</bdi>. الـ<bdi>45 hub</bdi> إجمالي يشمل الـ<bdi>5</bdi> التجريبية (حسب حكم المنظّمين).</p>
+    </div>
+    <div class="card c6">
+      <h3>الأسئلة الأربعة وكيف تُقرأ</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>السؤال</th><th>المطلوب</th><th>ليس مطلوبًا</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag q"><bdi>Q1</bdi></span> حجم السوق وعدد الشاحنات</td><td>سوق <b>التأجير</b> السنوي بالشاحنات والدولار، من الشحنة التي تتحرك</td><td>قيمة الشاحنات كأصول، سوق الشحن، مضاعفة العودة الفارغة</td></tr>
+          <tr><td><span class="tag q"><bdi>Q2</bdi></span> الاستثمار للخطة الخمسية</td><td>رأس المال الإجمالي من اليوم: شاحنات إضافية + <bdi>40 hub</bdi> جديدة</td><td>الـ<bdi>equity</bdi> وحده، إعادة شراء الـ<bdi>850</bdi></td></tr>
+          <tr><td><span class="tag q"><bdi>Q3</bdi></span> قيمة <bdi>Rakiza</bdi> اليوم</td><td>قيمة الآن، والمضاعف من أدلة الحالة، خصم <bdi>12%</bdi> سنويًا</td><td>عناوين واقعية، ديون مخترعة</td></tr>
+          <tr><td><span class="tag q"><bdi>Q4</bdi></span> هل تستثمر وبأي شروط</td><td>موقف واضح واحد + الشروط، ويمكن تغيير التقييم والنسبة والشرائح</td><td>ترك القرار للعميل، الاستثمار في المنافس بدلًا</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="card c7">
+      <h3>كيف سنُقيَّم؟</h3>
+      <div class="grid" style="gap:10px">
+        <div class="c6"><div class="callout teal"><b><bdi>1</bdi>. القدرة التحليلية (أعلى وزن):</b> أرقام <bdi>Q1–Q3</bdi> داخل النطاق الصحيح، واستخدام نتيجة كل سؤال في الذي بعده.</div></div>
+        <div class="c6"><div class="callout teal"><b><bdi>2</bdi>. التوصية:</b> هل هي مقنعة ومبنية على حقائق الحالة، مع شروط ومخاطر؟</div></div>
+        <div class="c6"><div class="callout"><b><bdi>3</bdi>. الحكم التجاري والإبداع (<bdi>~20%</bdi>):</b> اكتشاف الأدلة المخفية في القصاصات والمقابلات والخطة.</div></div>
+        <div class="c6"><div class="callout"><b><bdi>4</bdi>. العرض والكتابة (<bdi>~20%</bdi>):</b> قصة مترابطة، عناوين واضحة، تصميم نظيف.</div></div>
+      </div>
+      <p class="small muted">"إذا كانت إجابتنا <bdi>200M</bdi> فلا نتوقع منكم <bdi>2B</bdi>": الأرقام تُقبل ضمن نطاق. (<bdi>Program Overview</bdi>، <bdi>Q&amp;A 1</bdi>)</p>
+    </div>
+    <div class="card c5">
+      <h3>مسار البطولة</h3>
+      <div class="chart short"><canvas id="chFunnelComp" dir="ltr" aria-label="مسار التقييم من 2000 فريق إلى النهائي"></canvas></div>
+      <p class="small muted">الجولة <bdi>1</bdi> تقيّمها <bdi>Strategic Gears</bdi>، ثم تعيد <bdi>AlixPartners</bdi> تقييم أفضل <bdi>200</bdi> بشكل مستقل، ثم عرض افتراضي لأفضل <bdi>50</bdi>، ثم أفضل <bdi>20</bdi> في نهائي الظهران بحالة جديدة.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. EXHIBITS ============ -->
+<section class="band wrap" id="s2">
+  <div class="sec-head"><div class="shield"><bdi>02</bdi></div><div><h2>ملف الحالة: الـ<bdi>Exhibits</bdi> وماذا يخدم كل واحد</h2><p>القاعدة الذهبية في الحالة: "قليل مما تحتاجه مكتوب كرقم واحد. ابنِ الرقم، تحقق منه بطريقة ثانية، وتعامل مع كلام الناس كادعاء يُختبر".</p></div></div>
+  <div class="grid">
+    <div class="card c4"><h3><span class="tag"><bdi>Ex. 1a</bdi></span> <bdi>Gulf Commercial Review</bdi></h3>
+      <ul><li><span class="n"><bdi>300M</bdi></span> طن على الطرق الطويلة سنويًا، الحمولة تقطع <span class="n"><bdi>600</bdi></span> كم في المتوسط.</li><li>الشاحنة تحمل <span class="n"><bdi>25</bdi></span> طنًا وتقطع <span class="n"><bdi>120,000</bdi></span> كم سنويًا في <bdi>~200</bdi> رحلة.</li><li>الطاقة: ديزل <span class="n"><bdi>$0.28/km</bdi></span> مقابل كهرباء <span class="n"><bdi>$0.14/km</bdi></span> شاملة رسوم الشحن.</li><li>المال الجديد يرفع الأسطول إلى <bdi>~1,200</bdi> في السنة <bdi>1</bdi>.</li></ul>
+      <div class="callout small"><b>يخدم:</b> <bdi>Q1</bdi> مباشرة. السكان <bdi>(35M)</bdi> وشبكة الطرق (<bdi>70,000</bdi> كم) أرقام مشتتة غير لازمة.</div></div>
+    <div class="card c4"><h3><span class="tag"><bdi>Ex. 1b</bdi></span> <bdi>Corridor &amp; Cargo</bdi>: سباق المواقع</h3>
+      <ul><li>مشغّل مدرج أضاف <span class="n"><bdi>72</bdi></span> محطة فرفع حصته من <span class="n"><bdi>13.6%</bdi></span> إلى <span class="n"><bdi>14.5%</bdi></span>.</li><li>"تقريبًا محطة من كل <bdi>7</bdi>" فيها المزيج الصحيح، و"أقل من <bdi>1</bdi> من <bdi>100</bdi>" تشحن الشاحنات اليوم.</li><li>تكلفة الـ<bdi>hub</bdi> الكاملة <span class="n"><bdi>$4–6M</bdi></span>، وأكثر إذا احتاجت الشبكة عملًا حقيقيًا.</li></ul>
+      <div class="callout small"><b>الدليل (اشتقاق الفريق):</b> <span class="n"><bdi>72 ÷ 0.9% ≈ 8,000</bdi></span> محطة في المملكة، بافتراض ثبات إجمالي المحطات ⇐ <bdi>~1,130</bdi> موقعًا مؤهلًا. "لا تعدّوا كل محطة كـ<bdi>hub</bdi>".</div></div>
+    <div class="card c4"><h3><span class="tag"><bdi>Ex. 1c</bdi></span> لاعبان كبيران يراقبان</h3>
+      <ul><li>صانع شاحنات صيني يبيع الشاحنة مع معيار الشحن الخاص به.</li><li>شركة لوجستية مرتبطة بالدولة تدرس شحن الممرات.</li></ul>
+      <div class="callout small"><b>يخدم:</b> رأي نوعي في <bdi>Q4</bdi>: المنافسة دليل على نمو السوق، وتهديد لخندق <bdi>Rakiza</bdi>. لا يدخل في الأرقام.</div></div>
+    <div class="card c4"><h3><span class="tag"><bdi>Ex. 2</bdi></span> مقالة <bdi>Frontier Energy Review</bdi></h3>
+      <ul><li>الـ<bdi>hub</bdi> تربح فقط إذا كانت مشغولة، والسائق يشحن حيث الأرخص.</li><li>منافس يبني شبكة ثانية على نفس الطريق يقسم الحركة.</li><li>"الأصل الدائم هو دفتر التأجير لا الخرسانة".</li></ul>
+      <div class="callout small"><b>تعامل معها كحقائق</b> <bdi>(Case Briefing)</bdi>. تثبت أن ليست كل الـ<bdi>hubs</bdi> ستربح.</div></div>
+    <div class="card c4"><h3><span class="tag"><bdi>Ex. 3</bdi></span> مقابلة المؤسس</h3>
+      <ul><li>"<bdi>First mover is the only one who wins</bdi>"، "لدينا أفضل المواقع وعقود الطاقة".</li><li>إيرادات إضافية: بيانات الشحن، الطاقة الشمسية، بيع الكهرباء للشبكة.</li></ul>
+      <div class="callout small red"><b>أضعف دليل:</b> المؤسسون متفائلون دائمًا. كل ادعاء هنا يُختبر بالبيانات.</div></div>
+    <div class="card c4"><h3><span class="tag"><bdi>Ex. 4</bdi></span> ملاحظات العملاء والموظفين</h3>
+      <ul><li>شاحن صناعي: "لن أدفع أكثر إذا كانت الخدمة أسوأ"، لكن تقارير الانبعاثات لها قيمة.</li><li>مشغّل أسطول: "لا أحد يحوّل أسطوله بسبب كتيّب، الفوز بنا عمل مبيعات".</li><li>مهندس: <span class="n"><bdi>≈1.5 kWh/km</bdi></span>. مسؤول التكاليف: تحتاج <span class="n"><bdi>140–170k</bdi></span> كم سنويًا لتغلب الديزل، والسعر <span class="n"><bdi>$250k</bdi></span> مقابل <span class="n"><bdi>$150k</bdi></span>.</li></ul>
+      <div class="callout small teal"><b>أقوى دليل:</b> العملاء لا مصلحة لهم في الصفقة.</div></div>
+    <div class="card c4"><h3><span class="tag"><bdi>Ex. 5</bdi></span> رسمتا الإدارة</h3>
+      <ul><li>إيراد وتكلفة الـ<bdi>hub</bdi> مقابل الاستخدام: <b>التعادل ≈ <bdi>60%</bdi></b>.</li><li>الإيراد المخطط: <span class="n"><bdi>90</bdi> → <bdi>133</bdi> → <bdi>191</bdi> → <bdi>267</bdi> → <bdi>361</bdi></span> مليون.</li></ul>
+      <div class="callout small">"عُرضت لإظهار الإيجابيات، اقرؤوها للسلبيات أيضًا".</div></div>
+    <div class="card c4"><h3><span class="tag"><bdi>Ex. 6</bdi></span> مذكرة التوسع الداخلية</h3>
+      <ul><li>الممرات تُختار حيث تتلاقى: حركة شاحنات + شبكة دون ترقية كبيرة + أرض للدوران.</li><li>"افتحوا <bdi>hubs</bdi> أقل تعمل بقوة بدل تغطية الخريطة".</li><li><bdi>Dammam to Riyadh</bdi>: "<bdi>Best economics to start</bdi>". المناطق النائية: "<bdi>Later, not first</bdi>".</li></ul>
+      <div class="callout small"><b>للـ<bdi>Q4</bdi>:</b> دليل لترتيب التوسع وقد يصبح شرطًا تفرضه <bdi>Qafila</bdi>. في <bdi>Q2</bdi>: <b><bdi>40 hub</bdi> جديدة</b>.</div></div>
+    <div class="card c4"><h3><span class="tag"><bdi>Ex. 7</bdi></span> موجز لجنة الاستثمار</h3>
+      <ul><li>سؤال <bdi>1</bdi>: نفضّل حصة في التحول بدل البقاء خارجه؟ سؤال <bdi>2</bdi>: ماذا ندفع مقابله ونحن نملك المحطات والورش والعملاء؟</li><li><b>مخاوف <bdi>A</bdi>:</b> نخفّض المعايير الأجنبية بنحو <b>الخُمس</b>.</li><li><b>مخاوف <bdi>B</bdi>:</b> الخطة جذابة قرب نهاية السنة <bdi>5</bdi>، وتكلفة رأس المال <b><bdi>12%</bdi></b>.</li></ul>
+      <div class="callout small teal">المنظّم طلب معالجة المخاوف <bdi>A</bdi> و<bdi>B</bdi> صراحة في التقييم.</div></div>
+    <div class="card c6"><h3><span class="tag"><bdi>Ex. 8</bdi></span> صفقة <bdi>Changlu</bdi> في الصين</h3>
+      <p>مستثمر ضخ ~<span class="n"><bdi>$250M</bdi></span> مقابل ~<span class="n"><bdi>25%</bdi></span> من <bdi>Changlu Freight</bdi> (تأجير شاحنات كهربائية + شحن)، على إيراد يزيد قليلًا عن <span class="n"><bdi>$400M</bdi></span> ⇐ <b>مضاعف ضمني <bdi>2.5x</bdi> للإيراد</b>.</p>
+      <div class="callout small">"شركة شابة متعطشة لرأس المال في سوق بالكاد موجود يجب أن تُسعَّر بقسوة". هذا مبرر خصم الخُمس.</div></div>
+    <div class="card c6"><h3><span class="tag"><bdi>Ex. 9</bdi></span> الـ<bdi>Data room</bdi> وقواعد اللعب</h3>
+      <p><bdi>6</bdi> تبويبات خام بلا إجابات (تفصيلها في القسم <bdi>03</bdi>). قواعد التحليل: استخدموا الحالة فقط، لا أرقام واقعية تخالفها. <bdi>Q1</bdi> = تأجير فقط، <bdi>Q2</bdi> = رأس مال الخطة من اليوم، <bdi>Q3</bdi> = القيمة الآن والمضاعف من أدلة الحالة، <bdi>Q4</bdi> = قراركم، و"نعم" أو "لا" كلاهما يُقبل إن دُعم.</p>
+      <p class="small muted">آخر صفحة في الحالة: "<bdi>Build the numbers, judge the moat, price the deal, then stage the money</bdi>". هذه هي القصة كلها في جملة.</p></div>
+  </div>
+</section>
+
+<!-- ============ 3. EXCEL ============ -->
+<section class="band wrap" id="s3">
+  <div class="sec-head"><div class="shield"><bdi>03</bdi></div><div><h2>بيانات الإكسل: عن ماذا تعبّر</h2><p><bdi>7</bdi> تبويبات. تبويب <bdi>Info</bdi> يقول صراحة: لا يوجد سوق محسوب ولا تكلفة ولا ربح ولا تقييم ولا مضاعف جاهز. العيّنات ليست المجتمع كاملًا، وخطة الإدارة ادعاء يُختبر.</p></div></div>
+
+  <div class="tbl" style="margin-bottom:22px"><table>
+    <thead><tr><th>التبويب</th><th>كل صف يمثّل</th><th class="n"><bdi>Rows</bdi></th><th>يعبّر عن</th><th>نستخدمه في</th></tr></thead>
+    <tbody>
+      <tr><td><bdi>Route activity</bdi></td><td>ممر شحن واحد في سنة</td><td class="n"><bdi>6</bdi></td><td>أين تتحرك الشحنة وكم المسافة وجودة العودة والشبكة</td><td><span class="tag q"><bdi>Q1</bdi></span> <span class="tag q"><bdi>Q4</bdi></span></td></tr>
+      <tr><td><bdi>Fleet invoices</bdi></td><td>فاتورة شهرية لشاحنة واحدة من أسطول <bdi>Rakiza</bdi></td><td class="n"><bdi>240</bdi></td><td>كم تقطع الشاحنة فعلًا وكم تدفع</td><td><span class="tag q"><bdi>Q1</bdi></span> تحقق، <span class="tag q"><bdi>Q4</bdi></span> <bdi>TCO</bdi></td></tr>
+      <tr><td><bdi>Hub monthly records</bdi></td><td>شهر تشغيل لـ<bdi>hub</bdi> واحدة (عيّنة مختلطة)</td><td class="n"><bdi>240</bdi></td><td>اقتصاديات الشحن: الاستخدام مقابل الإيراد والتكلفة</td><td><span class="tag q"><bdi>Q3</bdi></span> <span class="tag q"><bdi>Q4</bdi></span></td></tr>
+      <tr><td><bdi>Station audit</bdi></td><td>محطة وقود واحدة شملها المسح</td><td class="n"><bdi>120</bdi></td><td>كم محطة تصلح فعلًا لتكون <bdi>hub</bdi></td><td><span class="tag q"><bdi>Q3</bdi></span> <span class="tag q"><bdi>Q4</bdi></span></td></tr>
+      <tr><td><bdi>Management plan</bdi></td><td>سنة من خطة الإدارة</td><td class="n"><bdi>5</bdi></td><td>ادعاء النمو الذي نختبره</td><td><span class="tag q"><bdi>Q2</bdi></span> <span class="tag q"><bdi>Q3</bdi></span></td></tr>
+      <tr><td><bdi>Market notes</bdi></td><td>ملاحظة أو رقم أو جولة تمويل</td><td class="n"><bdi>30</bdi></td><td>كل المدخلات والمقارنات</td><td>كل الأسئلة</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- Route -->
+  <div class="grid">
+    <div class="card c5">
+      <div class="eyebrow"><bdi>Tab · Route activity</bdi></div>
+      <h3>الممرات الستة = <bdi>300M</bdi> طن بالضبط</h3>
+      <p><b>الأعمدة:</b> الشحنة (طن/سنة)، المسافة باتجاه واحد (كم)، جودة حمولة العودة، جاهزية الشبكة، الشاحنات الثقيلة يوميًا.</p>
+      <p><b>يعبّر عن:</b> توزيع الطلب على الطرق. مجموع الشحنة يطابق رقم <bdi>Market notes</bdi>، أي أن عندنا طريقتين مستقلتين لبناء <bdi>Q1</bdi>.</p>
+      <div class="callout small red"><b>فخ:</b> "<bdi>Heavy trucks per day</bdi>" عدّ عند نقاط مراقبة لترتيب أولوية الممرات، ليس عدد رحلات ولا حجم الأسطول الوطني. وجودة العودة لا تضاعف السوق.</div>
+      <p class="small"><b>الملاحظة الأهم:</b> <bdi>Riyadh to Jeddah</bdi> وحده يحتاج <bdi>22k</bdi> شاحنة (<bdi>37%</bdi> من السوق) لأنه يجمع شحنة كبيرة (<bdi>70M</bdi> طن) ومسافة طويلة (<bdi>950</bdi> كم)، لكنه بشبكة "<bdi>Weak</bdi>".</p>
+    </div>
+    <div class="card c7">
+      <h4>الشاحنات اللازمة لكل ممر <span class="muted small">(طن ÷ <bdi>25</bdi> × المسافة ÷ <bdi>120,000</bdi>)</span></h4>
+      <div class="chart"><canvas id="chRoutes" dir="ltr" aria-label="الشاحنات اللازمة لكل ممر"></canvas></div>
+      <div class="tbl"><table>
+        <thead><tr><th>الممر</th><th class="n"><bdi>Freight Mt</bdi></th><th class="n"><bdi>km</bdi></th><th>العودة</th><th>الشبكة</th><th class="n"><bdi>Trucks/day</bdi></th><th class="n"><bdi>Trucks needed</bdi></th><th class="n"><bdi>$M/yr</bdi></th></tr></thead>
+        <tbody id="tbRoutes"></tbody>
+      </table></div>
+      <p class="src"><bdi>Source: Data room · Route activity</bdi>; <bdi>Market notes (25 t, 120,000 km, $55k)</bdi></p>
+    </div>
+  </div>
+
+  <div class="lane"></div>
+  <!-- Invoices -->
+  <div class="grid">
+    <div class="card c5">
+      <div class="eyebrow"><bdi>Tab · Fleet invoices</bdi></div>
+      <h3><bdi>20</bdi> شاحنة × <bdi>12</bdi> شهرًا من <bdi>2025</bdi></h3>
+      <p><b>الأعمدة:</b> رقم الشاحنة، الممر، الشهر، المسافة المقطوعة، مبلغ التأجير المفوتر (الطاقة منفصلة).</p>
+      <p><b>يعبّر عن:</b> الواقع التشغيلي لأسطول <bdi>Rakiza</bdi>: هل الشاحنة تعمل بالقدر الذي تفترضه الحالة؟ وهل السعر المعلن حقيقي؟</p>
+      <div class="chain">
+        <div class="node"><span class="v"><bdi>120,453</bdi></span><span class="l">متوسط كم/سنة (<bdi>≈120k</bdi> ✔)</span></div>
+        <div class="node"><span class="v"><bdi>$54,990</bdi></span><span class="l">متوسط الفاتورة السنوية (<bdi>≈$55k</bdi> ✔)</span></div>
+        <div class="node"><span class="v"><bdi>$392</bdi></span><span class="l">انحراف الفاتورة السنوية بين الشاحنات</span></div>
+      </div>
+      <div class="callout small"><b>الدليل المخفي:</b> شاحنة واحدة فقط تصل <bdi>140k</bdi> كم <bdi>(140,123)</bdi>. الحد اللازم لتتفوق الشاحنة الكهربائية على الديزل <bdi>140–170k</bdi>. التوفير في الطاقة عند <bdi>120k</bdi> = <span class="n"><bdi>(0.28 − 0.14) × 120,000 = $16,800</bdi></span> سنويًا مقابل فرق سعر <span class="n"><bdi>$100k</bdi></span> ⇐ استرداد <bdi>~6</bdi> سنوات.</div>
+      <p class="small muted">لا توجد قيم شاذة. ثبات الفواتير يدل على عقود مستقرة، لكن لا تستنتجوا طول العقد كحقيقة <bdi>(Q&amp;A 1)</bdi>.</p>
+    </div>
+    <div class="card c7">
+      <h4>المسافة السنوية لكل شاحنة مقابل منطقة "التفوق على الديزل"</h4>
+      <div class="chart tall"><canvas id="chTrucks" dir="ltr" aria-label="المسافة السنوية لكل شاحنة"></canvas></div>
+      <div class="legend-dots"><span><i style="background:var(--accent)"></i>المسافة الفعلية <bdi>2025</bdi></span><span><i style="background:var(--good-soft);outline:1px solid var(--good)"></i><bdi>140–170k</bdi>: منطقة التفوق على الديزل <bdi>(Ex. 4)</bdi></span><span><i style="background:var(--amber)"></i>افتراض الحالة <bdi>120k</bdi></span></div>
+      <p class="src"><bdi>Source: Data room · Fleet invoices (sum of 12 months per truck)</bdi>; <bdi>Ex. 4</bdi></p>
+    </div>
+  </div>
+
+  <div class="lane"></div>
+  <!-- Hubs -->
+  <div class="grid">
+    <div class="card c4">
+      <div class="eyebrow"><bdi>Tab · Hub monthly records</bdi></div>
+      <h3><bdi>20 hub × 12</bdi> شهرًا: عيّنة مختلطة</h3>
+      <p><b>الأعمدة:</b> رقم الـ<bdi>hub</bdi>، الممر، الشهر، جلسات الشحن، الاستخدام %، إيراد الشحن، تكلفة تشغيل الموقع.</p>
+      <p><b>يعبّر عن:</b> اقتصاديات الشحن. التكلفة تشمل الكهرباء المشتراة والموظفين والصيانة والإيجار ورسوم الشبكة، بلا إهلاك.</p>
+      <div class="callout small red"><b>فخ:</b> العيّنة تضم الـ<bdi>5</bdi> التجريبية لـ<bdi>Rakiza</bdi> ومواقع مماثلة لغيرها، <b>ولا يُعرف أيها لـ<bdi>Rakiza</bdi></b>. ممنوع افتراض <bdi>H-01..H-05</bdi>. عاملوها كمتوسط سوق (التجريبية عادة تبدو أفضل).</div>
+      <div class="chain">
+        <div class="node"><span class="v"><bdi>60.1%</bdi></span><span class="l">نقطة التعادل من البيانات (<bdi>Ex. 5</bdi> ✔)</span></div>
+        <div class="node"><span class="v"><bdi>10 / 20</bdi></span><span class="l"><bdi>hubs</bdi> مربحة على مدار السنة</span></div>
+        <div class="node"><span class="v"><bdi>~$480</bdi></span><span class="l">إيراد الجلسة، شبه ثابت</span></div>
+      </div>
+      <p class="small"><b>معادلتا العيّنة (سنويًا):</b> الإيراد ≈ <span class="n"><bdi>$52.2k</bdi> ×</span> نقطة استخدام. التكلفة ≈ <span class="n"><bdi>$2.62M + $8.3k</bdi> ×</span> نقطة استخدام. أي أن معظم التكلفة ثابتة، فكل نقطة استخدام فوق <bdi>60%</bdi> ربح شبه صافٍ.</p>
+    </div>
+    <div class="card c8">
+      <h4>كل شهر تشغيل لكل <bdi>hub</bdi>: الإيراد والتكلفة السنويان مقابل الاستخدام</h4>
+      <div class="chart tall"><canvas id="chHubScatter" dir="ltr" aria-label="الإيراد والتكلفة مقابل الاستخدام"></canvas></div>
+      <div class="legend-dots"><span><i style="background:var(--accent)"></i>الإيراد (<bdi>240</bdi> نقطة)</span><span><i style="background:var(--amber)"></i>التكلفة (<bdi>240</bdi> نقطة)</span><span><i style="background:var(--bad)"></i>التعادل <bdi>60%</bdi></span><span><i style="background:var(--ink)"></i>ما تحتاجه خطة الإدارة <bdi>~70%</bdi></span></div>
+      <p class="src"><bdi>Source: Data room · Hub monthly records (monthly × 12)</bdi>; <bdi>linear fit by team</bdi></p>
+    </div>
+    <div class="card c7">
+      <h4>ربح أو خسارة كل <bdi>hub</bdi> في <bdi>2025 ($M)</bdi>، مرتبة حسب الاستخدام</h4>
+      <div class="chart"><canvas id="chHubProfit" dir="ltr" aria-label="ربح كل hub"></canvas></div>
+      <p class="src"><bdi>Source: Data room · Hub monthly records (12-month totals)</bdi></p>
+    </div>
+    <div class="card c5">
+      <h4>الاستخدام حسب الممر مقابل خط التعادل</h4>
+      <div class="chart"><canvas id="chHubCorr" dir="ltr" aria-label="الاستخدام حسب الممر"></canvas></div>
+      <div class="callout small"><b>مفاجأة:</b> <bdi>Dammam to Riyadh</bdi>، الذي تسميه الإدارة "أفضل اقتصاديات للبدء"، كل <bdi>hubs</bdi> العيّنة عليه خاسرة <bdi>(35–51%)</bdi>. الأعلى: <bdi>Jeddah to Makkah (86%)</bdi> و<bdi>Riyadh to Qassim (79%)</bdi>. الموسمية خفيفة: من <bdi>56%</bdi> في يناير إلى <bdi>66%</bdi> في أكتوبر.</div>
+    </div>
+  </div>
+
+  <div class="lane"></div>
+  <!-- Stations -->
+  <div class="grid">
+    <div class="card c4">
+      <div class="eyebrow"><bdi>Tab · Station audit</bdi></div>
+      <h3><bdi>120</bdi> محطة: أيها تصلح <bdi>hub</bdi>؟</h3>
+      <p><b>الأعمدة:</b> المشغّل، الممر أو المنطقة، الشاحنات يوميًا، سعة الشبكة <bdi>(kVA)</bdi>، أرض للتوسع، مساحة لدوران الشاحنة، شحن حالي، ملاحظة المسّاح. وعلى الجانب جدول <bdi>COUNTIF</bdi> لعدد المحطات لكل مشغّل.</p>
+      <p><b>الشروط</b> <bdi>(Market notes + Q&amp;A)</bdi>: سعة ≥ <span class="n"><bdi>800 kVA</bdi></span> متاحة للشحن + تدفق ثابت ≥ <span class="n"><bdi>180</bdi></span> شاحنة يوميًا + أرض + مساحة دوران.</p>
+      <div class="callout small teal"><b>لماذا <bdi>180</bdi>؟</b> لا توجد أي محطة بين <bdi>159</bdi> و<bdi>186</bdi> شاحنة/يوم: فجوة طبيعية في البيانات. وكل محطة فوق <bdi>180</bdi> تحقق الشروط الثلاثة الأخرى، وملاحظاتها كلها إيجابية ("<bdi>popular rest halt</bdi>"، "<bdi>favoured truck stop</bdi>"…). هذا ما قصده المنظّم بـ"ستجدونها إن بحثتم".</div>
+    </div>
+    <div class="card c4">
+      <h4>قمع التأهيل</h4>
+      <div class="chart"><canvas id="chFunnel" dir="ltr" aria-label="قمع تأهيل المحطات"></canvas></div>
+      <p class="small"><b><bdi>17</bdi> من <bdi>120 = 14.2%</bdi> ≈ "<bdi>1</bdi> من <bdi>7</bdi>"</b> (يطابق <bdi>Ex. 1b</bdi>). محطة واحدة فقط تشحن اليوم (<bdi>0.8%</bdi> ≈ "أقل من <bdi>1</bdi> من <bdi>100</bdi>" ✔).</p>
+      <p class="small"><b>التعميم الوطني (اشتقاق الفريق):</b> <span class="n"><bdi>~8,000 × 14.2% ≈ 1,130</bdi></span> موقعًا مؤهلًا مقابل <bdi>45 hub</bdi> في الخطة ⇐ المواقع ليست نادرة، وخندق "أفضل المواقع" ضعيف.</p>
+    </div>
+    <div class="card c4">
+      <h4>نسبة التأهيل حسب المشغّل</h4>
+      <div class="chart"><canvas id="chStOp" dir="ltr" aria-label="نسبة التأهيل حسب المشغّل"></canvas></div>
+      <div class="callout small red"><b>محطات <bdi>Qafila</bdi>:</b> <bdi>1</bdi> فقط من <bdi>22</bdi> مؤهلة <bdi>(4.5%)</bdi> مقابل <bdi>14%</bdi> للسوق. ميزة <bdi>Qafila</bdi> الحقيقية ليست مواقعها، بل علاقات الأساطيل والورش.</div>
+    </div>
+    <div class="card c12">
+      <h4>المحطات المؤهلة الـ<bdi>17</bdi> وتوزيعها على الممرات</h4>
+      <div class="grid">
+        <div class="c7"><div class="tbl"><table>
+          <thead><tr><th>المحطة</th><th>المشغّل</th><th>الممر</th><th class="n"><bdi>Trucks/day</bdi></th><th class="n"><bdi>kVA</bdi></th><th>ملاحظة المسّاح</th></tr></thead>
+          <tbody id="tbStations"></tbody></table></div></div>
+        <div class="c5"><div class="tbl"><table>
+          <thead><tr><th>الممر / المنطقة</th><th class="n"><bdi>Surveyed</bdi></th><th class="n"><bdi>Qualify</bdi></th></tr></thead>
+          <tbody id="tbStArea"></tbody></table></div>
+          <p class="small muted" style="margin-top:8px"><bdi>Riyadh to Jeddah</bdi>: صفر محطات مؤهلة من <bdi>6</bdi>، رغم أنه أكبر طلب. المدن والمناطق النائية: صفر.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lane"></div>
+  <!-- Plan + notes -->
+  <div class="grid">
+    <div class="card c5">
+      <div class="eyebrow"><bdi>Tab · Management plan</bdi></div>
+      <h3>خطة الإدارة: <bdi>5</bdi> سنوات</h3>
+      <p><b>الأعمدة:</b> الشاحنات المؤجرة (نهاية السنة)، الـ<bdi>hubs</bdi> التجارية (نهاية السنة)، إيراد التأجير، إيراد الشحن، الإجمالي.</p>
+      <p><b>يعبّر عن:</b> ما تدّعيه <bdi>Rakiza</bdi>، وهو أساس <bdi>Q2</bdi> (كما هو) وأساس قيمة السنة <bdi>5</bdi> في <bdi>Q3</bdi>.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>اختبار</th><th>النتيجة</th></tr></thead>
+        <tbody>
+          <tr><td>إيراد التأجير ÷ <span class="n"><bdi>$55k</bdi></span></td><td>السنة <bdi>1 = 1,200</bdi> والسنة <bdi>5 = 3,600</bdi> بالضبط: <b>رصيد نهاية السنة</b> كأنه عمل سنة كاملة. على متوسط الأسطول: السنة <bdi>5</bdi> = <span class="n"><bdi>$181.5M</bdi></span> بدل <span class="n"><bdi>$198M</bdi></span>.</td></tr>
+          <tr><td>إيراد الشحن ÷ الـ<bdi>hubs</bdi></td><td><span class="n"><bdi>$3.0–3.6M</bdi></span> لكل <bdi>hub</bdi> ⇐ يتطلب <bdi>~70%</bdi> استخدام (أو <bdi>~81%</bdi> على متوسط عدد الـ<bdi>hubs</bdi>).</td></tr>
+          <tr><td>الشحن مقابل طاقة أسطول <bdi>Rakiza</bdi></td><td>أسطول <bdi>Rakiza</bdi> ينفق ~<span class="n"><bdi>$55M</bdi></span> طاقة في السنة <bdi>5</bdi> (متوسط <bdi>3,300</bdi> شاحنة × <bdi>120,000</bdi> كم × <bdi>$0.14</bdi>)، والخطة <span class="n"><bdi>$163M</bdi></span>: <bdi>~3</bdi> أضعاف ⇐ تفترض آلاف الشاحنات الكهربائية لطرف ثالث. <span class="muted">(استنتاج الفريق، لا تقسيم الإدارة)</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card c7">
+      <h4>الإيراد المخطط والأسطول والـ<bdi>hubs</bdi></h4>
+      <div class="chart tall"><canvas id="chPlan" dir="ltr" aria-label="خطة الإدارة"></canvas></div>
+      <p class="src"><bdi>Source: Data room · Management plan</bdi>; <bdi>Ex. 5</bdi></p>
+    </div>
+    <div class="card c12">
+      <div class="eyebrow"><bdi>Tab · Market notes</bdi></div>
+      <h3><bdi>30</bdi> ملاحظة مخلوطة: ماذا تعني كل مجموعة</h3>
+      <div class="grid">
+        <div class="c4"><h4>اقتصاديات الوحدة</h4><ul class="small"><li>شاحنة كهربائية <span class="n"><bdi>$250k</bdi></span>، ديزل <span class="n"><bdi>$150k</bdi></span></li><li>تأجير <span class="n"><bdi>$55k</bdi></span>/شاحنة/سنة</li><li>طاقة: ديزل <span class="n"><bdi>$0.28/km</bdi></span>، كهرباء <span class="n"><bdi>$0.14/km</bdi></span>، <span class="n"><bdi>1.5 kWh/km</bdi></span></li><li>تحتاج <span class="n"><bdi>140–170k</bdi></span> كم سنويًا لتغلب الديزل</li><li>بناء <bdi>hub</bdi> <span class="n"><bdi>$4–6M</bdi></span> (كل شيء مشمول)</li></ul></div>
+        <div class="c4"><h4>السوق و<bdi>Rakiza</bdi> اليوم</h4><ul class="small"><li>حمولة <span class="n"><bdi>25</bdi></span> طنًا، رحلة <span class="n"><bdi>600</bdi></span> كم، <span class="n"><bdi>120,000</bdi></span> كم/سنة</li><li><span class="n"><bdi>300M</bdi></span> طن سنويًا <bdi>(ministry-adjacent)</bdi></li><li><bdi>850</bdi> شاحنة اليوم، <bdi>~5 hubs</bdi> تجريبية</li><li><bdi>1</bdi> من <bdi>7</bdi> محطات على طرق الشحن الحقيقية، أقل من <bdi>1</bdi> من <bdi>100</bdi> تشحن اليوم</li><li>شبكة ~<span class="n"><bdi>800 kVA</bdi></span> + تدفق ثابت</li></ul></div>
+        <div class="c4"><h4>تعريفات وتقنية</h4><ul class="small"><li>إيراد الشحن = ما يدفعه العملاء للشحن، منفصل عن التأجير</li><li>هامش التأجير عند النضج: <bdi>high-20s</bdi> إلى <bdi>low-30s%</bdi> قبل التمويل، أقل بكثير في البداية</li><li>برنامج الشحن: <bdi>+10–15%</bdi> سعة باحتمال <bdi>40%</bdi></li><li>بطارية أفضل: <bdi>−10%</bdi> طاقة، توقيت غير مؤكد</li><li>إذا فاز معيار صانع كبير: ترقيات مكلفة للشبكات المستقلة</li></ul></div>
+      </div>
+      <h4 style="margin-top:8px">جولات التمويل الخمس: كلها أدلة تقييم، ليست منافسين بالضرورة</h4>
+      <div class="grid">
+        <div class="c7"><div class="tbl"><table>
+          <thead><tr><th>الشركة</th><th>النشاط</th><th class="n"><bdi>Invested</bdi></th><th class="n"><bdi>Stake</bdi></th><th class="n"><bdi>Post-money</bdi></th><th class="n"><bdi>Revenue</bdi></th><th class="n"><bdi>Post / Rev</bdi></th><th>الصلة</th></tr></thead>
+          <tbody id="tbComps"></tbody></table></div>
+          <p class="small muted" style="margin-top:8px"><bdi>Meridian</bdi> مكتوبة "<bdi>$900/y</bdi>": خطأ تنسيق، تُقرأ <bdi>$900M (Q&amp;A 1)</bdi>.</p></div>
+        <div class="c5"><div class="chart"><canvas id="chComps" dir="ltr" aria-label="مضاعفات جولات التمويل"></canvas></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. Q1 ============ -->
+<section class="band wrap" id="s4">
+  <div class="sec-head"><div class="shield"><bdi>04</bdi></div><div><h2><span class="tag q"><bdi>Q1</bdi></span> حجم السوق: طريقتان مستقلتان تلتقيان عند <bdi>60,000</bdi> شاحنة</h2><p>"أول سؤال هو الأبسط، لا تُعقّدوه" <bdi>(Q&amp;A 2)</bdi>. كل الشاحنات كهربائية اليوم، الشحنة ثابتة بلا نمو، ولا مضاعفة للعودة الفارغة.</p></div></div>
+  <div class="grid">
+    <div class="card c12">
+      <h3>الطريقة <bdi>1</bdi>: من <bdi>Market notes (Top-down)</bdi></h3>
+      <div class="chain">
+        <div class="node"><span class="v"><bdi>300M t</bdi></span><span class="l">شحنة سنوية</span></div><span class="op">÷</span>
+        <div class="node"><span class="v"><bdi>25 t</bdi></span><span class="l">حمولة الشاحنة</span></div><span class="op">=</span>
+        <div class="node"><span class="v"><bdi>12M</bdi></span><span class="l">رحلة محمّلة</span></div><span class="op">×</span>
+        <div class="node"><span class="v"><bdi>600 km</bdi></span><span class="l">متوسط الرحلة</span></div><span class="op">=</span>
+        <div class="node"><span class="v"><bdi>7.2B km</bdi></span><span class="l">كم-شاحنة</span></div><span class="op">÷</span>
+        <div class="node"><span class="v"><bdi>120,000 km</bdi></span><span class="l">لكل شاحنة سنويًا</span></div><span class="op">=</span>
+        <div class="node out"><span class="v"><bdi>60,000</bdi></span><span class="l">شاحنة</span></div><span class="op">×</span>
+        <div class="node"><span class="v"><bdi>$55,000</bdi></span><span class="l">تأجير/شاحنة/سنة</span></div><span class="op">=</span>
+        <div class="node out"><span class="v"><bdi>$3.30B</bdi></span><span class="l">سوق سنوي</span></div>
+      </div>
+    </div>
+    <div class="card c6">
+      <h3>الطريقة <bdi>2</bdi>: ممرًا ممرًا <bdi>(Bottom-up)</bdi></h3>
+      <p>لكل ممر: <span class="n">طن ÷ <bdi>25</bdi> × مسافته ÷ <bdi>120,000</bdi></span>، ثم الجمع. النتيجة <b class="n"><bdi>59,733</bdi></b> شاحنة = <b class="n"><bdi>$3.29B</bdi></b>. المسافة المرجحة <span class="n"><bdi>597</bdi></span> كم ≈ <bdi>600</bdi> ✔.</p>
+      <div class="chart"><canvas id="chQ1" dir="ltr" aria-label="مقارنة الطريقتين"></canvas></div>
+    </div>
+    <div class="card c6">
+      <h3>تحققات <bdi>(Sanity checks)</bdi></h3>
+      <ul>
+        <li><b>الفواتير:</b> <bdi>120,453</bdi> كم و<bdi>$54,990</bdi> لكل شاحنة سنويًا ⇐ مدخلات الطريقتين صحيحة.</li>
+        <li><b>"<bdi>~200</bdi> رحلة سنويًا"</b> في القصاصة = <span class="n"><bdi>120,000 ÷ 600</bdi></span> ✔ ⇐ طاقة الشاحنة <span class="n"><bdi>200 × 25 = 5,000</bdi></span> طن/سنة ⇐ <span class="n"><bdi>300M ÷ 5,000 = 60,000</bdi></span>.</li>
+        <li><b>منظور <bdi>Rakiza</bdi>:</b> <bdi>3,600</bdi> شاحنة في السنة <bdi>5</bdi> = <b><bdi>6%</bdi></b> من السوق. <bdi>Riyadh to Jeddah</bdi> وحده <bdi>37%</bdi>.</li>
+      </ul>
+      <div class="callout red small"><b>لا تفعلوا:</b> لا تضاعفوا للعودة الفارغة (يرفع الرقم خطأً)، لا تستخدموا <bdi>trucks/day</bdi> كأسطول، لا تطرحوا الـ<bdi>850</bdi>، لا تُدخلوا الشحن، لا تستخدموا حصة محطات <bdi>Qafila</bdi>، ولا <bdi>TAM/SAM/SOM</bdi> كإجابة (يمكن كطبقة داعمة معنونة).</div>
+      <p class="small muted"><b>عنوان شريحة مقترح:</b> "<bdi>Two independent builds converge on ~60k trucks and a ~$3.3B annual leasing market</bdi>".</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. Q2 ============ -->
+<section class="band wrap" id="s5">
+  <div class="sec-head"><div class="shield"><bdi>05</bdi></div><div><h2><span class="tag q"><bdi>Q2</bdi></span> الاستثمار المطلوب: <bdi>~$888M</bdi>، والشاحنات هي التكلفة الحقيقية</h2><p>"ستكتشفون أن تكلفة الـ<bdi>hub</bdi> ليست أكبر تكلفة" <bdi>(Q&amp;A 2)</bdi>. الحساب: الفرق بين اليوم والسنة <bdi>5</bdi> حسب خطة الإدارة كما هي، دون إهلاك أو استبدال، ودون طرح التدفق التشغيلي.</p></div></div>
+  <div class="grid">
+    <div class="card c7">
+      <h3>من مكوّنات الخطة إلى فجوة التمويل <bdi>($M)</bdi></h3>
+      <div class="chart tall"><canvas id="chWaterfall" dir="ltr" aria-label="جسر رأس المال"></canvas></div>
+      <p class="src"><bdi>Trucks: (3,600 − 850) × $250k · Hubs: (45 − 5) × $5M midpoint · Source: Ex. 4, 6</bdi>; <bdi>Market notes</bdi>; <bdi>Q&amp;A 1–2</bdi></p>
+    </div>
+    <div class="card c5">
+      <h3>الجدول السنوي</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>السنة</th><th class="n"><bdi>+Trucks</bdi></th><th class="n"><bdi>Trucks $M</bdi></th><th class="n"><bdi>+Hubs</bdi></th><th class="n"><bdi>Hubs $M</bdi></th><th class="n"><bdi>Total $M</bdi></th></tr></thead>
+        <tbody>
+          <tr><td><bdi>1</bdi></td><td class="n"><bdi>350</bdi></td><td class="n"><bdi>87.5</bdi></td><td class="n"><bdi>3</bdi></td><td class="n"><bdi>15</bdi></td><td class="n"><bdi>102.5</bdi></td></tr>
+          <tr><td><bdi>2</bdi></td><td class="n"><bdi>500</bdi></td><td class="n"><bdi>125</bdi></td><td class="n"><bdi>4</bdi></td><td class="n"><bdi>20</bdi></td><td class="n"><bdi>145</bdi></td></tr>
+          <tr><td><bdi>3</bdi></td><td class="n"><bdi>700</bdi></td><td class="n"><bdi>175</bdi></td><td class="n"><bdi>8</bdi></td><td class="n"><bdi>40</bdi></td><td class="n"><bdi>215</bdi></td></tr>
+          <tr><td><bdi>4</bdi></td><td class="n"><bdi>600</bdi></td><td class="n"><bdi>150</bdi></td><td class="n"><bdi>12</bdi></td><td class="n"><bdi>60</bdi></td><td class="n"><bdi>210</bdi></td></tr>
+          <tr><td><bdi>5</bdi></td><td class="n"><bdi>600</bdi></td><td class="n"><bdi>150</bdi></td><td class="n"><bdi>13</bdi></td><td class="n"><bdi>65</bdi></td><td class="n"><bdi>215</bdi></td></tr>
+          <tr class="total"><td>المجموع</td><td class="n"><bdi>2,750</bdi></td><td class="n"><bdi>687.5</bdi></td><td class="n"><bdi>40</bdi></td><td class="n"><bdi>200</bdi></td><td class="n"><bdi>887.5</bdi></td></tr>
+        </tbody>
+      </table></div>
+      <p class="small">السنة <bdi>1</bdi>: الـ<bdi>hubs</bdi> من <bdi>5</bdi> إلى <bdi>8 = 3</bdi> جديدة فقط. نطاق تكلفة الـ<bdi>hub</bdi> <span class="n"><bdi>$4–6M</bdi></span> ⇐ إجمالي <span class="n"><bdi>$848–928M</bdi></span>.</p>
+      <div class="chart short"><canvas id="chCapexYear" dir="ltr" aria-label="الإنفاق الرأسمالي السنوي"></canvas></div>
+    </div>
+    <div class="card c4"><h4>لماذا يهم هذا لـ<bdi>Q4</bdi>؟</h4><p>الـ<span class="n"><bdi>$120M</bdi></span> = <bdi>13.5%</bdi> من الخطة، وتكفي تقريبًا للسنة <bdi>1</bdi> (<span class="n"><bdi>$102.5M</bdi></span>). يبقى ~<span class="n"><bdi>$770M</bdi></span> ستأتي من جولات أو ديون لاحقة ⇐ حصة الـ<bdi>20%</bdi> ستُخفَّف ما لم تحصل <bdi>Qafila</bdi> على حقوق <bdi>pro-rata</bdi>.</p></div>
+    <div class="card c4"><h4>طبقة ثانية (اختيارية، معنونة)</h4><p>الرقم الرئيسي هو الإجمالي. يمكن إضافة طبقة: كم يمكن تمويله بدين أصول للشاحنات (<bdi>77%</bdi> من الـ<bdi>capex</bdi>) وبالتدفق التشغيلي، وما فجوة الـ<bdi>equity</bdi> المتبقية. الحالة لا تعطي هيكل تمويل، فكل رقم هنا افتراض فريق.</p></div>
+    <div class="card c4"><h4>ما لا يشمله الرقم (اذكروه)</h4><p>خسائر التشغيل في سنوات النمو، رأس المال العامل، التقنية والإطلاق، ترقيات الشبكة فوق النطاق. ذِكر ذلك "مُقدَّر" عند المحكّمين <bdi>(Q&amp;A 1)</bdi>، لكن لا تدمجوه في الرقم الرئيسي.</p></div>
+  </div>
+</section>
+
+<!-- ============ 6. Q3 ============ -->
+<section class="band wrap" id="s6">
+  <div class="sec-head"><div class="shield"><bdi>06</bdi></div><div><h2><span class="tag q"><bdi>Q3</bdi></span> القيمة اليوم: <bdi>~$400–410M</bdi> مقابل <bdi>$480M</bdi></h2><p>"أصعب سؤال": ابنوا نموذجًا مصغّرًا بسيناريوهات استخدام <bdi>60/70/80% (Q&amp;A 1)</bdi>، واستخدموا مضاعف خروج من الحالة ثم اخصموا <bdi>12%</bdi> سنويًا <bdi>(Q&amp;A 2)</bdi>.</p></div></div>
+  <div class="grid">
+    <div class="card c12">
+      <h3>السلسلة الأساسية</h3>
+      <div class="chain">
+        <div class="node"><span class="v"><bdi>$250M ÷ 25%</bdi></span><span class="l"><bdi>Changlu post-money = $1,000M</bdi></span></div><span class="op">÷</span>
+        <div class="node"><span class="v"><bdi>$410M</bdi></span><span class="l">إيراد <bdi>Changlu</bdi></span></div><span class="op">=</span>
+        <div class="node"><span class="v"><bdi>2.44x ≈ 2.5x</bdi></span><span class="l">مضاعف الإيراد <bdi>(Ex. 8)</bdi></span></div><span class="op">×</span>
+        <div class="node"><span class="v"><bdi>0.8</bdi></span><span class="l">خصم الخُمس <bdi>(Ex. 7-A)</bdi></span></div><span class="op">=</span>
+        <div class="node"><span class="v"><bdi>2.0x</bdi></span><span class="l">مضاعف محلي</span></div><span class="op">×</span>
+        <div class="node"><span class="v"><bdi>$361M</bdi></span><span class="l">إيراد السنة <bdi>5</bdi> (الخطة)</span></div><span class="op">=</span>
+        <div class="node"><span class="v"><bdi>$722M</bdi></span><span class="l">قيمة الخروج في السنة <bdi>5</bdi></span></div><span class="op">÷</span>
+        <div class="node"><span class="v"><bdi>1.12⁵ = 1.762</bdi></span><span class="l">خصم <bdi>12%</bdi> لـ<bdi>5</bdi> سنوات <bdi>(Ex. 7-B)</bdi></span></div><span class="op">=</span>
+        <div class="node out"><span class="v">≈ <bdi>$410M</bdi></span><span class="l">القيمة اليوم (<bdi>≈$400M</bdi> عند <bdi>2.44x</bdi>)</span></div>
+      </div>
+      <p class="small muted">لماذا <bdi>Changlu</bdi> وحده؟ لأنه الوحيد الذي يؤجر شاحنات ويشغّل شحنًا مثل <bdi>Rakiza</bdi>. "المتوسط هو الإحصاء الخطأ: اختاروا المقارن ودافعوا عنه" (ورشة الـ<bdi>DD). Handa</bdi> (شحن فقط، <bdi>3.06x</bdi>) و<bdi>Vardhan</bdi> (تأجير ديزل وكهربائي، <bdi>0.91x</bdi>) تصلحان لتحقق إضافي يقيّم كل نشاط بمضاعف مقارنه (طريقة الفريق).</p>
+    </div>
+    <div class="card c6">
+      <h3>اقتصاديات الـ<bdi>hub</bdi>: أين تقع خطة الإدارة؟</h3>
+      <div class="chart tall"><canvas id="chHubEcon" dir="ltr" aria-label="اقتصاديات الـhub حسب الاستخدام"></canvas></div>
+      <p class="small">إيراد الشحن في السنة <bdi>5</bdi> لـ<bdi>45 hub</bdi>: عند <bdi>60%</bdi> = <span class="n"><bdi>$140M</bdi></span>، عند <bdi>70%</bdi> = <span class="n"><bdi>$164M</bdi></span> (≈ خطة الإدارة <span class="n"><bdi>$163M</bdi></span>)، عند <bdi>80%</bdi> = <span class="n"><bdi>$187M</bdi></span>. أي أن الخطة تفترض أن كل <bdi>hub</bdi> جديدة ستكون ضمن أفضل <bdi>~35%</bdi> من العيّنة (<bdi>7</bdi> من <bdi>20</bdi> فقط ≥ <bdi>70%</bdi>).</p>
+    </div>
+    <div class="card c6">
+      <h3>مصفوفة القيمة اليوم <bdi>($M)</bdi></h3>
+      <p class="small">مضاعف (بعد الخصم) × إيراد السنة <bdi>5 ÷ 1.762</bdi>. التأجير = <bdi>$198M</bdi> كما في الخطة، والشحن = <bdi>45 hub</bdi> × إيراد الاستخدام.</p>
+      <div class="tbl heat"><table>
+        <thead><tr><th>المضاعف ↓ / الاستخدام ←</th><th class="n"><bdi>60%</bdi></th><th class="n"><bdi>65%</bdi></th><th class="n"><bdi>70%</bdi></th><th class="n"><bdi>75%</bdi></th><th class="n"><bdi>80%</bdi></th></tr></thead>
+        <tbody><tr><td class="n" style="text-align:right"><bdi>1.80x</bdi></td><td class="n h-low"><bdi>345</bdi></td><td class="n h-low"><bdi>357</bdi></td><td class="n h-low"><bdi>369</bdi></td><td class="n h-low"><bdi>381</bdi></td><td class="n h-low"><bdi>393</bdi></td></tr><tr><td class="n" style="text-align:right"><bdi>1.95x (2.44 × 0.8)</bdi></td><td class="n h-low"><bdi>374</bdi></td><td class="n h-low"><bdi>387</bdi></td><td class="n h-mid"><bdi>400</bdi></td><td class="n h-mid"><bdi>413</bdi></td><td class="n h-mid"><bdi>426</bdi></td></tr><tr><td class="n" style="text-align:right"><bdi>2.00x (2.5 × 0.8)</bdi></td><td class="n h-low"><bdi>384</bdi></td><td class="n h-low"><bdi>397</bdi></td><td class="n h-mid h-ctr"><bdi>410</bdi></td><td class="n h-mid"><bdi>424</bdi></td><td class="n h-mid"><bdi>437</bdi></td></tr><tr><td class="n" style="text-align:right"><bdi>2.20x</bdi></td><td class="n h-mid"><bdi>422</bdi></td><td class="n h-mid"><bdi>437</bdi></td><td class="n h-near"><bdi>452</bdi></td><td class="n h-near"><bdi>466</bdi></td><td class="n h-hit"><bdi>481</bdi></td></tr></tbody>
+      </table></div>
+      <div class="legend-dots" style="margin-top:8px"><span><i class="h-hit"></i>≥ <bdi>$480M</bdi> (يبرر الطلب)</span><span><i class="h-near"></i><bdi>$440–479M</bdi></span><span><i class="h-mid"></i><bdi>$400–439M</bdi></span><span><i class="h-low"></i>&lt; <bdi>$400M</bdi></span><span><i style="outline:2px solid var(--ink)"></i>الحالة المركزية</span></div>
+      <div class="callout small" style="margin-top:8px"><b>عنوان شريحة مقترح:</b> "<bdi>Rakiza's $480M pre-money is only reached if every hub runs at ≥80% and the offshore multiple is barely discounted. Our central value is ~$400–410M</bdi>."</div>
+      <p class="small muted">لو حُسب التأجير على متوسط الأسطول <bdi>($181.5M)</bdi> تنخفض كل خانة <bdi>~$17–21M</bdi>. ولو استُخدم متوسط استخدام العيّنة (<bdi>~61%</bdi>) مع متوسط الأسطول تصبح القيمة <bdi>~$370M</bdi> عند <bdi>2.0x</bdi>، أو <bdi>~$345M</bdi> إذا حُسب الشحن أيضًا على متوسط عدد الـ<bdi>hubs</bdi> خلال السنة <bdi>5 (38.5</bdi> بدل <bdi>45</bdi>).</p>
+    </div>
+
+    <div class="card c12" id="calc">
+      <h3>حاسبة التقييم والحصة (للتجربة داخل الفريق)</h3>
+      <p class="small muted">حساب توضيحي بنفس معادلات هذه الصفحة. غيّروا الافتراضات وشاهدوا أثرها على القيمة والحصة. الأرقام النهائية تُبنى في ملف الإكسل.</p>
+      <div class="calc">
+        <div class="ins">
+          <div class="field"><label for="inU">متوسط استخدام الـ<bdi>hubs</bdi> في السنة <bdi>5</bdi> <output id="oU"><bdi>70%</bdi></output></label><input id="inU" type="range" min="45" max="95" step="1" value="70"></div>
+          <div class="field"><label for="inM">مضاعف الإيراد الأجنبي قبل الخصم <output id="oM"><bdi>2.50x</bdi></output></label><input id="inM" type="range" min="0.8" max="3.2" step="0.05" value="2.5"></div>
+          <div class="field"><label for="inK">خصم المعيار الأجنبي <output id="oK"><bdi>20%</bdi></output></label><input id="inK" type="range" min="0" max="40" step="1" value="20"></div>
+          <div class="field"><label for="inL">أساس إيراد التأجير في السنة <bdi>5</bdi></label><select id="inL"><option value="198">رصيد نهاية السنة: ⁨$198M⁩ (الخطة)</option><option value="181.5">متوسط الأسطول: ⁨$181.5M⁩ (رأي الفريق)</option></select></div>
+          <div class="field"><label for="inR">تكلفة رأس المال <output id="oR"><bdi>12%</bdi></output></label><input id="inR" type="range" min="8" max="20" step="0.5" value="12"></div>
+          <div class="field"><label for="inI">مبلغ استثمار <bdi>Qafila ($M)</bdi> <output id="oI"><bdi>$120M</bdi></output></label><input id="inI" type="range" min="40" max="200" step="5" value="120"></div>
+        </div>
+        <div class="outs">
+          <div class="res">
+            <div class="kpi"><span class="l">إيراد الشحن <bdi>Y5</bdi></span><span class="v" id="rC">—</span></div>
+            <div class="kpi"><span class="l">إجمالي إيراد <bdi>Y5</bdi></span><span class="v" id="rT">—</span></div>
+            <div class="kpi"><span class="l">قيمة الخروج <bdi>Y5</bdi></span><span class="v" id="rE">—</span></div>
+            <div class="kpi hl"><span class="l">القيمة اليوم <bdi>(Pre-money)</bdi></span><span class="v" id="rV">—</span></div>
+            <div class="kpi"><span class="l">الفرق عن طلب <bdi>$480M</bdi></span><span class="v" id="rG">—</span></div>
+            <div class="kpi"><span class="l">حصة <bdi>Qafila</bdi> العادلة <bdi>(post)</bdi></span><span class="v" id="rS">—</span></div>
+          </div>
+          <div class="chart short"><canvas id="chCalc" dir="ltr" aria-label="القيمة مقابل الطلب"></canvas></div>
+          <p class="small muted" id="rNote"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. Q4 ============ -->
+<section class="band wrap" id="s7">
+  <div class="sec-head"><div class="shield"><bdi>07</bdi></div><div><h2><span class="tag q"><bdi>Q4</bdi></span> هل تستثمر <bdi>Qafila</bdi>؟ وبأي شروط؟</h2><p>المنظّمون طلبوا: <bdi>3</bdi> خيارات تُقيَّم بمعايير، اختيار واحد، شروط برقمين (كم ومقابل أي نسبة، و<bdi>pre</bdi> أم <bdi>post</bdi>)، ثم المخاطر والمعالجات. "قبعات استراتيجية لا حسابية".</p></div></div>
+  <div class="grid">
+    <div class="card c7">
+      <h3>تقييم الخيارات (رأي الفريق، للنقاش)</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>المعيار</th><th><bdi>A</bdi>. لا نستثمر / نبني داخليًا</th><th><bdi>B</bdi>. نقبل كما هو <bdi>($120M / 20%)</bdi></th><th><bdi>C</bdi>. استثمار مشروط ومرحلي</th></tr></thead>
+        <tbody>
+          <tr><td>العائد مقابل <bdi>12%</bdi></td><td><span class="tag warn">غير معروف</span> لا أرقام لتكلفة البناء</td><td><span class="tag bad">ضعيف</span> سعر أعلى <bdi>~15–20%</bdi></td><td><span class="tag good">أفضل</span> سعر قرب القيمة</td></tr>
+          <tr><td>المخاطرة</td><td><span class="tag bad">عالية</span> تنفيذ من الصفر</td><td><span class="tag bad">عالية</span> كل المال مقدمًا</td><td><span class="tag good">مُدارة</span> المال يتبع الـ<bdi>milestones</bdi></td></tr>
+          <tr><td>التوافق الاستراتيجي</td><td><span class="tag warn">متوسط</span> محطات <bdi>Qafila</bdi> ضعيفة التأهيل</td><td><span class="tag good">عالٍ</span></td><td><span class="tag good">عالٍ</span> + اتفاقيات تجارية</td></tr>
+          <tr><td>الحماية من التخفيف</td><td><span class="tag">—</span></td><td><span class="tag bad">لا</span> فجوة <bdi>$770M</bdi></td><td><span class="tag good">نعم</span> <bdi>pro-rata</bdi> و<bdi>anti-dilution</bdi></td></tr>
+          <tr><td>سرعة دخول السوق</td><td><span class="tag bad">بطيئة</span> سنوات</td><td><span class="tag good">فورية</span></td><td><span class="tag good">فورية</span></td></tr>
+          <tr class="hl"><td><b>الحكم</b></td><td>يُذكر كبديل مرفوض</td><td>يُرفض بالسعر الحالي</td><td><b>الموصى به</b></td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">"لا نستثمر" مقبول أيضًا إذا دُعم بافتراضات معنونة. الفرق بين الافتراض والتخيّل: الاستقراء من بيانات معطاة افتراض، واختراع أرقام لا أساس لها تخيّل <bdi>(Q&amp;A 2)</bdi>.</p>
+    </div>
+    <div class="card c5">
+      <h3>الشروط المقترحة للخيار <bdi>C</bdi></h3>
+      <ul>
+        <li><b>التقييم:</b> ~<span class="n"><bdi>$400M</bdi></span> <bdi>pre-money</bdi> ⇐ الـ<span class="n"><bdi>$120M</bdi></span> تشتري ~<b class="n"><bdi>23%</bdi></b> <bdi>post-money</bdi>، أو <bdi>20%</bdi> مقابل ~<span class="n"><bdi>$100M</bdi></span>. صرّحوا: <bdi>pre</bdi> أم <bdi>post</bdi>.</li>
+        <li><b>شرائح <bdi>(earn-out)</bdi>:</b> مثال: <span class="n"><bdi>$60M</bdi></span> الآن + <span class="n"><bdi>$60M</bdi></span> عند <bdi>milestones</bdi>.</li>
+        <li><b>حماية:</b> <bdi>pro-rata/follow-on</bdi>، <bdi>anti-dilution</bdi>، حق أولوية في الجولات القادمة.</li>
+        <li><b>حوكمة:</b> مقعد أو مقعدان في المجلس، حقوق معلومات، موافقة على الـ<bdi>capex</bdi> الكبير وتسلسل الممرات.</li>
+        <li><b>تمويل:</b> الشاحنات بدين أصول لا بحقوق ملكية <bdi>12%</bdi>.</li>
+        <li><b>اتفاقيات تجارية:</b> ورش <bdi>Qafila</bdi> تخدم شاحنات <bdi>Rakiza</bdi>، علاقات الأساطيل قناة بيع، المواقع المؤهلة فقط بعد التدقيق.</li>
+        <li><b><bdi>Due diligence</bdi>:</b> الميزانية والديون (غير مُفصح عنها)، أداء الـ<bdi>pilots</bdi> الخمسة، عقود التأجير.</li>
+      </ul>
+    </div>
+    <div class="card c12">
+      <h3>تسلسل الشرائح (مثال توضيحي)</h3>
+      <div class="chain">
+        <div class="node"><span class="v"><bdi>T0 · $60M</bdi></span><span class="l">عند التوقيع: تموّل شاحنات و<bdi>hubs</bdi> السنة <bdi>1</bdi> تقريبًا</span></div><span class="op">←</span>
+        <div class="node"><span class="v"><bdi>Milestone 1</bdi></span><span class="l">متوسط استخدام الـ<bdi>hubs ≥ 60–65%</bdi> لربعين متتاليين</span></div><span class="op">+</span>
+        <div class="node"><span class="v"><bdi>Milestone 2</bdi></span><span class="l"><bdi>~1,200</bdi> شاحنة مؤجرة بعقود (هدف السنة <bdi>1</bdi>)</span></div><span class="op">+</span>
+        <div class="node"><span class="v"><bdi>Milestone 3</bdi></span><span class="l">نمو حصة شحن أساطيل الطرف الثالث</span></div><span class="op">=</span>
+        <div class="node out"><span class="v"><bdi>T1 · $60M</bdi></span><span class="l">الشريحة الثانية + حق المشاركة في الجولة التالية</span></div>
+      </div>
+      <p class="small muted">نفس هيكل توصية ورشة الـ<bdi>DD</bdi>: "<bdi>60M</bdi> غير مدعومة؛ <bdi>44M</bdi> على شريحتين، الثانية مرتبطة باستخدام فوق <bdi>10%</bdi> لربعين متتاليين".</p>
+    </div>
+    <div class="card c7">
+      <h3>بطاقة الممرات: أين نبدأ؟ (رأي الفريق)</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>الممر</th><th class="n"><bdi>Hub util</bdi>.</th><th class="n"><bdi>Qualified sites</bdi></th><th class="n"><bdi>Trucks needed</bdi></th><th>الشبكة</th><th>العودة</th><th>رأي الإدارة</th><th>حكمنا</th></tr></thead>
+        <tbody>
+          <tr><td><bdi>Riyadh to Qassim</bdi></td><td class="n"><bdi>79%</bdi></td><td class="n"><bdi>6 / 14</bdi></td><td class="n"><bdi>4,400</bdi></td><td><bdi>Adequate</bdi></td><td><bdi>Poor</bdi></td><td>—</td><td><span class="tag good">ابدأ هنا</span></td></tr>
+          <tr><td><bdi>Jeddah to Makkah</bdi></td><td class="n"><bdi>86%</bdi></td><td class="n"><bdi>5 / 19</bdi></td><td class="n"><bdi>667</bdi></td><td><bdi>Adequate</bdi></td><td><bdi>Good</bdi></td><td>—</td><td><span class="tag good">ابدأ هنا</span></td></tr>
+          <tr><td><bdi>Riyadh to Jeddah</bdi></td><td class="n"><bdi>70%</bdi></td><td class="n"><bdi>0 / 6</bdi></td><td class="n"><bdi>22,167</bdi></td><td><bdi>Weak</bdi></td><td><bdi>Mixed</bdi></td><td><bdi>Long</bdi>; <bdi>charging gaps</bdi></td><td><span class="tag warn">بعد ترقية الشبكة</span></td></tr>
+          <tr><td><bdi>Dammam to Jubail</bdi></td><td class="n"><bdi>56%</bdi></td><td class="n"><bdi>4 / 12</bdi></td><td class="n"><bdi>1,000</bdi></td><td><bdi>Strong</bdi></td><td><bdi>Good</bdi></td><td><bdi>Short, busy, predictable</bdi></td><td><span class="tag warn">بحجم مضمون فقط</span></td></tr>
+          <tr><td><bdi>Dammam to Riyadh</bdi></td><td class="n"><bdi>41%</bdi></td><td class="n"><bdi>2 / 8</bdi></td><td class="n"><bdi>12,000</bdi></td><td><bdi>Adequate</bdi></td><td><bdi>Good</bdi></td><td>"<bdi>Best economics to start</bdi>"</td><td><span class="tag bad">اختبر الادعاء</span></td></tr>
+          <tr><td><bdi>Remote / mining spurs</bdi></td><td class="n">—</td><td class="n"><bdi>0 / 4</bdi></td><td class="n">—</td><td><bdi>Weak</bdi></td><td><bdi>Poor</bdi></td><td>"<bdi>Later, not first</bdi>"</td><td><span class="tag">لاحقًا</span></td></tr>
+        </tbody>
+      </table></div>
+      <p class="src"><bdi>Hub util. = average of sample hubs on that corridor (mixed sample) · Qualified = station audit filter · Ex. 6</bdi></p>
+    </div>
+    <div class="card c5">
+      <h3>لماذا يفيد <bdi>Qafila</bdi>، ولماذا قد يضرها؟</h3>
+      <div class="grid" style="gap:10px">
+        <div class="c6"><div class="callout teal small"><b>يفيد:</b><br>• حصة في تحوّل وقود الشحن بدل البقاء خارجه<br>• تحوّط ضد تراجع الديزل وشاحنات الديزل<br>• <bdi>Rakiza</bdi> تحتاج ما تملكه <bdi>Qafila</bdi>: أساطيل وورش ومبيعات<br>• أسرع من البناء من الصفر<br>• سياق سياساتي: <bdi>Saudi Green Initiative</bdi> (نوعيًا فقط)</div></div>
+        <div class="c6"><div class="callout red small"><b>قد يضر:</b><br>• كل شاحنة كهربائية تتوقف عن شراء ديزل <bdi>Qafila</bdi><br>• يضعف وكالة شاحنات الديزل<br>• رأس مال كبير لاحقًا أو تخفيف<br>• خندق الشحن قابل للنسخ<br>• (لا داعي لتكميم التآكل، اذكروه للدراسة)</div></div>
+      </div>
+    </div>
+    <div class="card c12">
+      <h3>المخاطر والمعالجات</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>الخطر</th><th>الدليل</th><th>المعالجة في الشروط</th></tr></thead>
+        <tbody>
+          <tr><td>استخدام الـ<bdi>hubs</bdi> دون التعادل</td><td>نصف العيّنة خاسرة، والخطة تحتاج <bdi>~70%</bdi></td><td>الشريحة الثانية مرتبطة بالاستخدام، وبناء <bdi>hubs</bdi> أقل تعمل بقوة</td></tr>
+          <tr><td>منافس يقسم الحركة على نفس الطريق</td><td><bdi>Ex. 2</bdi>، <bdi>~1,130</bdi> موقعًا مؤهلًا متاحًا للجميع</td><td>الأولوية للممرات عالية الاستخدام، عقود طويلة مع الأساطيل، حقوق معلومات</td></tr>
+          <tr><td>صانع صيني يبيع الشاحنة مع شحنه الخاص</td><td><bdi>Ex. 1c</bdi>، <bdi>Market notes</bdi> (معايير الشحن)</td><td>شرط مراقبة المعايير، مرونة الأجهزة، تنويع موردي الشاحنات</td></tr>
+          <tr><td>طلب العملاء غير مضمون</td><td><bdi>120k</bdi> كم أقل من <bdi>140–170k</bdi>، "لن أدفع أكثر"</td><td>البيع عبر علاقات أساطيل <bdi>Qafila</bdi>، تقارير انبعاثات كقيمة مضافة، ورش <bdi>Qafila</bdi> للخدمة</td></tr>
+          <tr><td>تخفيف حصة <bdi>Qafila</bdi></td><td>فجوة <bdi>~$770M</bdi> بعد الـ<bdi>$120M</bdi></td><td><bdi>pro-rata</bdi>، <bdi>anti-dilution</bdi>، حق أولوية</td></tr>
+          <tr><td>ميزانية غير معروفة</td><td>لا ديون ولا التزامات مُفصح عنها</td><td><bdi>Due diligence</bdi> شرطي قبل الإغلاق</td></tr>
+          <tr><td>تآكل أعمال الديزل</td><td>القصاصة <bdi>1a</bdi>: "رهان على المستقبل وضد جزء من حاضرك"</td><td>تحوّط مقصود، ودراسة تآكل لاحقة</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. CLUES ============ -->
+<section class="band wrap" id="s8">
+  <div class="sec-head"><div class="shield"><bdi>08</bdi></div><div><h2>الأدلة المخفية: هنا تُكسب نقاط "<bdi>Business judgment</bdi>"</h2><p>"الإبداع في الجولة الأولى هو إيجاد الأدلة المخفية في القصاصات والمقابلات والخطة، وتحويلها إلى توصية أدق" <bdi>(Q&amp;A 2)</bdi>.</p></div></div>
+  <div class="grid" id="clues"></div>
+</section>
+
+<!-- ============ 9. RULINGS ============ -->
+<section class="band wrap" id="s9">
+  <div class="sec-head"><div class="shield"><bdi>09</bdi></div><div><h2>ما حسمه المنظّمون في الفيديوهات</h2><p>إضافات شفهية غير موجودة نصًا في ملفات <bdi>PDF</bdi>، أو تصحيحات لتناقضات. التوقيت يشير إلى ملف النص المفرّغ لكل فيديو.</p></div></div>
+  <div class="grid">
+    <div class="card c8">
+      <div class="tbl"><table>
+        <thead><tr><th>الموضوع</th><th>الحكم النهائي</th><th>المرجع</th></tr></thead>
+        <tbody>
+          <tr><td><bdi>Q1</bdi> يشمل الشحن؟</td><td><b>لا، تأجير فقط.</b> قيل "نعم" مرة في <bdi>Case Briefing</bdi> ثم صُحّح رسميًا</td><td class="small"><bdi>Briefing 00:38</bdi> ← <bdi>Q&amp;A 1 00:25</bdi>، <bdi>Q&amp;A 2 00:19</bdi></td></tr>
+          <tr><td>فرضية <bdi>Q1</bdi></td><td>كل الشاحنات كهربائية اليوم، الشحنة ثابتة، السوق "اليوم"</td><td class="small"><bdi>Q&amp;A 1 00:27</bdi>، <bdi>Briefing 00:55</bdi></td></tr>
+          <tr><td>عدد الـ<bdi>hubs</bdi> في <bdi>Q2</bdi></td><td><b><bdi>40</bdi> جديدة</b>؛ <bdi>45</bdi> إجمالي في التشغيل والإيراد</td><td class="small"><bdi>Q&amp;A 1 00:35</bdi>، <bdi>Q&amp;A 2 00:20</bdi></td></tr>
+          <tr><td><bdi>Q2</bdi> ببساطة</td><td>الفرق من اليوم للسنة <bdi>5</bdi>؛ ذِكر ما لا يشمله "مُقدَّر"</td><td class="small"><bdi>Q&amp;A 1 00:33</bdi></td></tr>
+          <tr><td>إهلاك واستبدال</td><td>لا إهلاك، لا استبدال، الـ<bdi>850</bdi> تبقى</td><td class="small"><bdi>Q&amp;A 1 00:39</bdi>، <bdi>Briefing 01:04</bdi></td></tr>
+          <tr><td><bdi>Pre / Post</bdi></td><td><b><bdi>$600M post</bdi>، <bdi>$480M pre</bdi></b>؛ "<bdi>pre $600M</bdi>" كان خطأً</td><td class="small"><bdi>Q&amp;A 2 00:26</bdi></td></tr>
+          <tr><td>طريقة التقييم</td><td><bdi>Exit multiple</bdi> مفضّل؛ <bdi>DCF</bdi> اختياري وقد يعطي قيمة سالبة لشركة ناشئة</td><td class="small"><bdi>Q&amp;A 2 00:28</bdi></td></tr>
+          <tr><td>الخصم</td><td><bdi>12%</bdi> سنويًا على كامل المدة، لا خصم لمرة واحدة</td><td class="small"><bdi>Q&amp;A 2 PDF</bdi>، <bdi>Q&amp;A 1 00:47</bdi></td></tr>
+          <tr><td>خصم الخُمس</td><td>على المضاعف/المعيار، <b>لا</b> على مبلغ الـ<bdi>$120M</bdi></td><td class="small"><bdi>Q&amp;A 1 PDF</bdi></td></tr>
+          <tr><td>الديون والنقد</td><td>تجاهلوها؛ غياب الميزانية = شرط <bdi>due diligence</bdi> في <bdi>Q4</bdi></td><td class="small"><bdi>Q&amp;A 2 00:25</bdi></td></tr>
+          <tr><td>عيّنة الـ<bdi>hubs</bdi></td><td>متوسط سوق؛ الـ<bdi>pilots</bdi> عادة تبدو أفضل</td><td class="small"><bdi>Q&amp;A 1 00:43</bdi>، <bdi>Briefing 00:45</bdi></td></tr>
+          <tr><td><bdi>180</bdi> شاحنة/يوم</td><td>عتبة التدفق الثابت: "ستجدونها إن بحثتم في البيانات"</td><td class="small"><bdi>Q&amp;A 1 00:30</bdi></td></tr>
+          <tr><td>إيراد الخطة</td><td>إيراد مُكتسب خلال كل سنة (حسب المنظّم)</td><td class="small"><bdi>Briefing 01:03</bdi></td></tr>
+          <tr><td>الاستثمار في المنافس الصيني</td><td>ليس توصية رئيسية؛ يُذكر كبديل إن كان القرار "لا"</td><td class="small"><bdi>Q&amp;A 2 00:32</bdi></td></tr>
+          <tr><td>استخدام <bdi>AI</bdi></td><td><b>مسموح مع إفصاح إلزامي</b>: أين وكيف وما الذي تحققتم منه</td><td class="small"><bdi>Briefing 00:40</bdi>، <bdi>AI 01:21</bdi></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card c4">
+      <h3>تلميحات منهجية قيلت شفهيًا</h3>
+      <ol class="small">
+        <li><b><bdi>Station audit</bdi>:</b> "احسبوا نسبة المحطات المؤهلة وطبّقوها على كل محطات الدولة، هذا يبني حالة إيراد الشحن".</li>
+        <li><b><bdi>Hub records</bdi>:</b> "السؤالان الأهم: عند أي استخدام تربح الـ<bdi>hub</bdi>؟ وكم <bdi>hub</bdi> مربحة اليوم؟"</li>
+        <li><b><bdi>Q3</bdi>:</b> نموذج مصغّر بسيناريوهات <bdi>60/70/80%</bdi>، ويمكن افتراض ما ستحققه <bdi>Rakiza</bdi> من سنة معيّنة.</li>
+        <li><b>الخطة:</b> "هل سيحققون فعلًا <bdi>$361M</bdi>؟ اختبروها"، وابنوا خطة بقيود؛ لكن <bdi>Q2</bdi> بأرقام الإدارة.</li>
+        <li><b><bdi>Ex. 6</bdi></b> قد يتحول إلى شروط تفرضها <bdi>Qafila</bdi>.</li>
+        <li><b><bdi>Q4</bdi>:</b> شريحة "لماذا يفيد/لا يفيد <bdi>Qafila</bdi>"، ويمكن شراء الشركة كلها، أو <bdi>royalty</bdi>، أو <bdi>earn-out</bdi>.</li>
+        <li><b>الصيغة:</b> "<bdi>X</bdi> دولار اليوم مقابل <bdi>Y%</bdi>، ومزيد لاحقًا إذا تحققت شروط".</li>
+        <li><b>الوقت:</b> <bdi>48–72</bdi> ساعة عمل جماعي تكفي.</li>
+      </ol>
+      <div class="callout small"><b>تناقض محسوم:</b> ورشة العرض مالت لترك التوصية للنهاية، لكن منظّم الحالة قال مرتين: <b>الشريحة الأولى ملخص تنفيذي يتضمن التوصية</b>. منظّم الحالة أولى.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10. WORKSHOPS ============ -->
+<section class="band wrap" id="s10">
+  <div class="sec-head"><div class="shield"><bdi>10</bdi></div><div><h2>دروس الورش الست وكيف تنطبق على حالتنا</h2><p>ورشة الـ<bdi>Due Diligence</bdi> هي الأهم: حالة تدريبية اسمها <bdi>ChargeFlow</bdi> (مشغّل شحن سعودي، عرض <bdi>45%</bdi> مقابل <bdi>60M</bdi> ريال) بنفس هيكل حالتنا تقريبًا.</p></div></div>
+  <div class="grid">
+    <div class="card c12">
+      <div class="eyebrow"><bdi>Market &amp; Commercial Due Diligence · Manal · 3h24m</bdi></div>
+      <h3>القالب الذي تكاد حالتنا تطابقه</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>الدرس في الورشة</th><th>التطبيق على <bdi>Rakiza</bdi></th></tr></thead>
+        <tbody>
+          <tr><td>بناء السوق بطريقتين مستقلتين ثم تفكيك الفجوة. لا متوسط، ولا عرض الرقم الأدنى فقط.</td><td><bdi>60,000</bdi> مقابل <bdi>59,733</bdi>: الطريقتان تلتقيان (القسم <bdi>04</bdi>).</td></tr>
+          <tr><td>اختبار ادعاء "المتحرك الأول" بمعايير صلبة: من <bdi>41</bdi> موقعًا، <bdi>9</bdi> عقود حصرية و<bdi>14</bdi> سعة محجوزة فقط.</td><td><bdi>~1,130</bdi> موقعًا مؤهلًا متاحًا للجميع، ولا حصرية معلنة لـ<bdi>Rakiza</bdi>.</td></tr>
+          <tr><td>سيناريو دخول منافس: تداخل ⇐ استخدام وسعر أقل ⇐ <bdi>EBITDA</bdi> أقل.</td><td>مثال توضيحي: <bdi>hub</bdi> عند <bdi>70%</bdi> تنزل إلى <bdi>~55%</bdi> إذا انقسمت الحركة فتصبح خاسرة.</td></tr>
+          <tr><td>رأس المال: ما تدفعه للأسهم ≠ ما تحتاجه الخطة. <bdi>Gross</bdi> − تدفق تشغيلي − نقد − دين = فجوة الـ<bdi>equity</bdi>.</td><td><bdi>$888M</bdi> إجمالي مقابل <bdi>$120M</bdi> مطلوبة.</td></tr>
+          <tr><td>خطأ شائع: مقارنة سعر الدخول بقيمة الخروج وتجاهل المال المضخوخ بينهما.</td><td>الوصول إلى <bdi>$361M</bdi> يحتاج <bdi>~$770M</bdi> إضافية ⇐ تخفيف ما لم تشارك <bdi>Qafila</bdi>.</td></tr>
+          <tr><td>السيناريوهات على المحرّك الرئيسي (الاستخدام) لا نسب نمو اعتباطية. حدّدوا التعادل قبل التوقع.</td><td>منخفض <bdi>~62–65%</bdi>، مركزي <bdi>~70%</bdi>، مرتفع <bdi>~80–86%</bdi>.</td></tr>
+          <tr><td>تحدّي الافتراضات "الطوباوية" للإدارة.</td><td>تأجير على رصيد نهاية السنة، شحن يحتاج <bdi>70–81%</bdi>، طلب من شاحنات طرف ثالث شبه غير موجودة.</td></tr>
+          <tr><td>اختيار المقارن بمعايير واستبعاد المختلف هيكليًا. مصفوفة مضاعف × استخدام.</td><td><bdi>Changlu 2.5x</bdi> ⇐ <bdi>2.0x</bdi>؛ <bdi>$480M</bdi> لا تُبلغ إلا عند <bdi>2.2x</bdi> و<bdi>80%</bdi>.</td></tr>
+          <tr><td>القيمة الاستراتيجية للمشتري (+ مواقع، + قنوات <bdi>B2B</bdi>، − تآكل الوقود) ⇐ سعر تفاوضي بين المستقل والطلب.</td><td>عرض بين <bdi>~$400M</bdi> و<bdi>$480M pre</bdi> مع شرائح.</td></tr>
+          <tr><td>عناوين كجمل استنتاج: "<bdi>60M</bdi> غير مدعومة؛ <bdi>44M</bdi> على شرائح مرتبطة بالاستخدام".</td><td>اكتبوا كل عنوان شريحة بنفس الأسلوب.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card c6">
+      <h3>السوق الجذاب ≠ صفقة جذابة</h3>
+      <div class="matrix">
+        <div class="mx trap"><b>سوق جذاب، صفقة غالية</b><span class="small">منطقة دفع مبالغ فيه: "السوق ينمو إذن حصتي ستربح"</span><span class="pin"><bdi>Rakiza</bdi> عند <bdi>$480M</bdi></span></div>
+        <div class="mx go"><b>سوق جذاب، صفقة جيدة</b><span class="small">هنا تستثمر وتلتقط النمو</span><span class="pin"><bdi>Rakiza</bdi> عند <bdi>~$400M</bdi> + شرائح</span></div>
+        <div class="mx no"><b>سوق ضعيف، صفقة غالية</b><span class="small">رفض مباشر</span></div>
+        <div class="mx"><b>سوق ضعيف، صفقة رخيصة</b><span class="small">رهان على الحظ</span></div>
+        <div class="ax">السعر غير جذاب (الصفقة)</div><div class="ax">السعر جذاب (الصفقة)</div>
+      </div>
+      <p class="small muted"><bdi>Q1</bdi> يجيب عن السوق، و<bdi>Q3/Q4</bdi> عن الصفقة. افصلوهما في القصة.</p>
+    </div>
+    <div class="card c6">
+      <h3>هرم الأدلة: بمن نثق أكثر؟</h3>
+      <div class="ladder">
+        <div class="rung"><span class="who">العملاء</span><div><span class="small">لا مصلحة لهم في الصفقة ⇐ <bdi>Ex. 4</bdi> (الشاحن، مشغّل الأسطول)</span><div class="meter"><i style="width:100%"></i></div></div></div>
+        <div class="rung"><span class="who">المشغّلون</span><div><span class="small">موثوقون في التكلفة والتنفيذ والشبكة ⇐ مشغّل الـ<bdi>hub</bdi>، المهندس، مسؤول التكاليف</span><div class="meter"><i style="width:78%"></i></div></div></div>
+        <div class="rung"><span class="who">المحللون والصحافة</span><div><span class="small">مفيدون للسياق مع تحيّز الجهة ⇐ <bdi>Ex. 1</bdi>، <bdi>Ex. 2</bdi>، <bdi>Ex. 8</bdi></span><div class="meter"><i style="width:55%"></i></div></div></div>
+        <div class="rung"><span class="who">الإدارة</span><div><span class="small">حافز للتفاؤل ⇐ <bdi>Ex. 3</bdi>، <bdi>Ex. 5</bdi>، <bdi>Ex. 6</bdi>، الخطة</span><div class="meter"><i style="width:30%"></i></div></div></div>
+      </div>
+    </div>
+    <div class="card c12">
+      <div class="eyebrow"><bdi>Problem Structuring · Laura Jebson, Partner, Deloitte</bdi></div>
+      <h3><bdi>7</bdi> خطوات بقيادة الفرضيات</h3>
+      <div class="steps">
+        <div class="step"><span class="sn"><bdi>1</bdi></span><b>عرّف المشكلة كسؤال</b><span>الأسئلة الأربعة هي تعريف مشكلتنا</span></div>
+        <div class="step"><span class="sn"><bdi>2</bdi></span><b>فكّكها لقضايا <bdi>MECE</bdi></b><span>السوق، الخطة، السعر، التوافق، المخاطر + خانة "أخرى"</span></div>
+        <div class="step"><span class="sn"><bdi>3</bdi></span><b>فرضيات</b><span>"الخطة متفائلة"، "السعر مرتفع"، "الخندق ضعيف"</span></div>
+        <div class="step"><span class="sn"><bdi>4</bdi></span><b>اجمع البيانات</b><span>الحقائق + الآراء + بيانات بديلة <bdi>(proxy)</bdi></span></div>
+        <div class="step"><span class="sn"><bdi>5</bdi></span><b>اختبر بعتبات</b><span>"الـ<bdi>hub</bdi> تربح إذا الاستخدام &gt; <bdi>60%</bdi>"</span></div>
+        <div class="step"><span class="sn"><bdi>6</bdi></span><b>توصية تناسب العميل</b><span>تحترم قيود <bdi>Qafila</bdi> وقدراتها</span></div>
+        <div class="step"><span class="sn"><bdi>7</bdi></span><b>تواصل بالهرم</b><span>الجواب أولًا ثم الدعم</span></div>
+      </div>
+      <p class="small muted" style="margin-top:8px">إذا لم تُدحض أي فرضية فهذا علامة انتقاء. والـ<bdi>AI</bdi> يميل لموافقتك: اطلبوا منه الحجج المضادة.</p>
+    </div>
+    <div class="card c12">
+      <h3>هرم الأفكار لقصتنا (<bdi>Pyramid structure</bdi> كما في ورشة <bdi>Problem Structuring</bdi>)</h3>
+      <div class="pyr">
+        <div class="gt">على <bdi>Qafila</bdi> أن تستثمر في <bdi>Rakiza</bdi> بتقييم <bdi>~$400M pre-money</bdi>، على شرائح مرتبطة بالاستخدام، مع حماية من التخفيف</div>
+        <div class="kl">
+          <div><b>السوق حقيقي</b><br><span class="small"><bdi>~60k</bdi> شاحنة، <bdi>$3.3B</bdi></span></div>
+          <div><b>الخطة متفائلة</b><br><span class="small"><bdi>$888M</bdi>، و<bdi>70%</bdi> استخدام لكل <bdi>hub</bdi></span></div>
+          <div><b>السعر مرتفع</b><br><span class="small"><bdi>~$410M</bdi> مقابل <bdi>$480M</bdi></span></div>
+          <div><b>القيمة لـ<bdi>Qafila</bdi> استراتيجية</b><br><span class="small">أساطيل وورش، وتحوّط</span></div>
+        </div>
+        <div class="sp small">الدعم: <bdi>Route activity</bdi>، <bdi>Fleet invoices</bdi>، <bdi>Hub records</bdi>، <bdi>Station audit</bdi>، <bdi>Management plan</bdi>، <bdi>Market notes</bdi>، <bdi>Ex. 1–8</bdi></div>
+      </div>
+      <p class="small muted" style="margin-top:8px">ابنوا الهرم من الأسفل، وقدّموه من الأعلى. اجعلوا الأرقام تُجمع: <span class="n"><bdi>687.5 + 200 = 887.5</bdi></span>.</p>
+    </div>
+    <div class="card c4">
+      <div class="eyebrow"><bdi>Crafting Powerful Presentations · Selma Afif, Director, Deloitte</bdi></div>
+      <h3>القصة أولًا، والشرائح أخيرًا</h3>
+      <ul class="small">
+        <li><b><bdi>Storyboard</bdi></b> بالعناوين فقط قبل أي رسم.</li>
+        <li><b><bdi>Acid test</bdi>:</b> قراءة العناوين وحدها تروي الحجة كاملة.</li>
+        <li><bdi>Headline</bdi> صغير للموضوع + <bdi>Tagline</bdi> للاستنتاج.</li>
+        <li><bdi>Situation</bdi> ← <bdi>Complication</bdi> ← <bdi>Resolution</bdi>. بلا تعقيد يصبح تقريرًا.</li>
+        <li>الجمهور: لجنة استثمار رسمية مالية تريد قرارًا.</li>
+        <li>شريحة واحدة = رسالة واحدة.</li>
+      </ul>
+    </div>
+    <div class="card c4">
+      <h3>قواعد الأسلوب و<bdi>6</bdi> أخطاء</h3>
+      <ul class="small">
+        <li><bdi>Slide master</bdi> موحد؛ <bdi>Bold</bdi> بلون واحد؛ لا <bdi>italic</bdi> ولا <bdi>underline</bdi>.</li>
+        <li>كل رسم: عنوان + وحدة + مصدر. الأرقام داخل النص ضعيفة.</li>
+        <li>أحمر = مشكلة، أخضر = إيجابي، كهرماني = متوسط.</li>
+        <li>لا صناديق لكل شيء؛ محاذاة؛ أيقونات من مكتبة واحدة.</li>
+        <li><b>الأخطاء:</b> عنوان ضعيف، بلا "<bdi>so what</bdi>"، تفريغ بيانات، بيانات يتيمة، ازدحام، عنوان لا يطابق المحتوى.</li>
+      </ul>
+    </div>
+    <div class="card c4">
+      <div class="eyebrow"><bdi>Data Analysis with Excel · Lujain, Deloitte</bdi></div>
+      <h3>أدوات تحتاجونها فعلًا</h3>
+      <ul class="small">
+        <li><b><bdi>COUNTIF</bdi></b> (المستخدمة أصلًا في تبويب <bdi>Station audit</bdi>) لعدّ المحطات المؤهلة.</li>
+        <li><b><bdi>SUMPRODUCT</bdi></b> لبناء السوق بالممر.</li>
+        <li><b><bdi>PivotTable</bdi></b> لمتوسطات الشاحنات والـ<bdi>hubs</bdi> (كما في الورشة).</li>
+        <li>المعايير في خلايا منفصلة، وتثبيت المراجع ($).</li>
+        <li><b><bdi>Waterfall</bdi></b> لـ<bdi>Q2</bdi> وجسر التقييم، <b><bdi>Scatter</bdi></b> للتعادل، <bdi>Line</bdi> للزمن فقط.</li>
+      </ul>
+    </div>
+    <div class="card c7">
+      <div class="eyebrow"><bdi>Responsible use of AI · Pablo Delgado, Partner, Strategic Gears</bdi> (مقيّم الجولة <bdi>1</bdi>)</div>
+      <h3>"الـ<bdi>AI</bdi> لا يوقّع العرض. أنتم توقّعون"</h3>
+      <ul class="small">
+        <li>استخدموه كمُتحدٍّ لا كمرجع، واحذروا "<bdi>cognitive offloading</bdi>".</li>
+        <li><b>لا تحملوا دقة أكثر مما يدعمه أضعف مُدخل:</b> تكلفة الـ<bdi>hub</bdi> نطاق، فاكتبوا <bdi>Q2</bdi> "<bdi>~$890M (~$850–930M)</bdi>" لا "<bdi>$887.5M</bdi>"، والإكسل يحتفظ بالدقة.</li>
+        <li>النموذج يعطي أسباب "نعم" ثم "لا" بنفس الثقة: أنتم الحكم.</li>
+        <li>للبطولة سياسة <bdi>AI</bdi> مكتوبة: <b>اذكروا أين وكيف استُخدم، وما تحققتم منه، وما رفضتموه</b>. "إذا اكتشفنا حلولًا منسوخة من <bdi>AI</bdi> فالفريق غالبًا لن يفوز".</li>
+        <li>اكتبوا العناوين والنصوص بلغتكم: المحكّمون قالوا إنهم يميّزون أسلوب الـ<bdi>AI</bdi>.</li>
+      </ul>
+    </div>
+    <div class="card c5">
+      <h3>نموذج إفصاح <bdi>AI</bdi> (عدّلوه بصدق)</h3>
+      <pre class="tpl" id="aiTpl">AI use disclosure — Team CC-XXXX
+AI assistance was used in preparing this submission as follows:
+• Transcribing the program recordings and summarising them for internal reading.
+• Brainstorming the issue tree and challenging our hypotheses (asked for counter-arguments).
+• Drafting Excel formula structures, which we rebuilt and checked against the data room.
+Verified: every number in the deck traces to our Excel workbook and the case pack.
+Rejected: AI-suggested figures not found in the case; external benchmarks.
+All analysis, judgments and the recommendation are the team's own.</pre>
+      <button class="btn" id="copyAi" type="button">نسخ النص</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11. DECK + EXCEL ============ -->
+<section class="band wrap" id="s11">
+  <div class="sec-head"><div class="shield"><bdi>11</bdi></div><div><h2>هيكل العرض والإكسل وقائمة التسليم</h2><p>غلاف + <bdi>8–12</bdi> شريحة + شكر (<bdi>14</bdi> كحد أقصى، والفواصل تُحسب). رقم السؤال أعلى يمين كل شريحة تجيبه، ورسوم <bdi>native</bdi> قابلة للتعديل، ومصادر صغيرة أسفل اليسار.</p></div></div>
+  <div class="grid">
+    <div class="card c7">
+      <h3><bdi>Storyline</bdi> مقترح (العنوان = الاستنتاج)</h3>
+      <div class="tbl"><table>
+        <thead><tr><th class="n">#</th><th>عنوان الشريحة</th><th>السؤال</th></tr></thead>
+        <tbody>
+          <tr><td class="n"><bdi>0</bdi></td><td><bdi>Cover: Team ID CC</bdi>-####</td><td>—</td></tr>
+          <tr><td class="n"><bdi>1</bdi></td><td><bdi>Executive summary</bdi>: السوق، الاستثمار، القيمة، التوصية والشروط</td><td>—</td></tr>
+          <tr><td class="n"><bdi>2</bdi></td><td><bdi>Two independent builds converge on ~60k trucks / ~$3.3B</bdi></td><td><span class="tag q"><bdi>Q1</bdi></span></td></tr>
+          <tr><td class="n"><bdi>3</bdi></td><td><bdi>Invoices confirm the inputs</bdi>; <bdi>Rakiza's Year-5 fleet is 6% of the market</bdi></td><td><span class="tag q"><bdi>Q1</bdi></span></td></tr>
+          <tr><td class="n"><bdi>4</bdi></td><td><bdi>The plan needs ~$890M</bdi>; <bdi>trucks are 77% and the $120M covers Year 1</bdi></td><td><span class="tag q"><bdi>Q2</bdi></span></td></tr>
+          <tr><td class="n"><bdi>5</bdi></td><td><bdi>Hubs break even at 60%</bdi>; <bdi>the plan assumes ~70% at every hub</bdi></td><td><span class="tag q"><bdi>Q2</bdi></span> <span class="tag q"><bdi>Q3</bdi></span></td></tr>
+          <tr><td class="n"><bdi>6</bdi></td><td><bdi>Where hubs work: utilization × qualified sites by corridor</bdi></td><td><span class="tag q"><bdi>Q3</bdi></span> <span class="tag q"><bdi>Q4</bdi></span></td></tr>
+          <tr><td class="n"><bdi>7</bdi></td><td><bdi>Changlu is the right comparable: 2.5x becomes 2.0x after the IC's markdown</bdi></td><td><span class="tag q"><bdi>Q3</bdi></span></td></tr>
+          <tr><td class="n"><bdi>8</bdi></td><td><bdi>Value today ~$400–410M vs $480M pre-money (matrix)</bdi></td><td><span class="tag q"><bdi>Q3</bdi></span></td></tr>
+          <tr><td class="n"><bdi>9</bdi></td><td><bdi>The first-mover moat is thinner than claimed</bdi></td><td><span class="tag q"><bdi>Q4</bdi></span></td></tr>
+          <tr><td class="n"><bdi>10</bdi></td><td><bdi>Why this matters for Qafila</bdi>; <bdi>three options assessed</bdi></td><td><span class="tag q"><bdi>Q4</bdi></span></td></tr>
+          <tr><td class="n"><bdi>11</bdi></td><td><bdi>Recommendation and terms: valuation, tranches, rights, rollout</bdi></td><td><span class="tag q"><bdi>Q4</bdi></span></td></tr>
+          <tr><td class="n"><bdi>12</bdi></td><td><bdi>Risks, mitigations, diligence conditions, AI disclosure</bdi></td><td><span class="tag q"><bdi>Q4</bdi></span></td></tr>
+          <tr><td class="n"><bdi>13</bdi></td><td><bdi>Thank you</bdi></td><td>—</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card c5">
+      <h3>ملف الإكسل: من الخام إلى الإجابة</h3>
+      <div class="chain" style="flex-direction:column">
+        <div class="node"><span class="v"><bdi>0_Index</bdi></span><span class="l">خريطة التبويبات + ترميز الألوان <bdi>(input / formula / output)</bdi></span></div>
+        <div class="node"><span class="v"><bdi>Inputs (7 tabs)</bdi></span><span class="l">تبويبات الـ<bdi>data room</bdi> كما هي، معنونة كمدخلات</span></div>
+        <div class="node"><span class="v"><bdi>Assumptions</bdi></span><span class="l">كل افتراض مرة واحدة + الوحدة + المصدر + المبرر + الحساسية</span></div>
+        <div class="node"><span class="v"><bdi>Q1_Market · Q2_Capital</bdi></span><span class="l">الطريقتان + الجدول السنوي</span></div>
+        <div class="node"><span class="v"><bdi>Hub_Economics · Station_Screen · Plan_Test</bdi></span><span class="l">التعادل، % المربحة، القمع، التعميم الوطني، اختبارات الخطة</span></div>
+        <div class="node"><span class="v"><bdi>Q3_Valuation · Q4_Deal</bdi></span><span class="l">المقارنات، الخصم، المصفوفة، <bdi>pre/post</bdi>، الشرائح، التخفيف</span></div>
+        <div class="node out"><span class="v"><bdi>Checks</bdi></span><span class="l">مطابقة كل رقم في العرض مع خليته</span></div>
+      </div>
+      <p class="small muted">بلا <bdi>hard-coding</bdi> وبلا <bdi>dashboards</bdi> فاخرة. "ليس اختبارًا لمهارات الإكسل بل لطريقة التفكير".</p>
+    </div>
+    <div class="card c12">
+      <h3>قائمة التسليم (تُحفظ في متصفحك)</h3>
+      <div class="progress" aria-hidden="true"><i id="ckBar"></i></div>
+      <p class="small muted" id="ckTxt"><bdi>0</bdi> من <bdi>0</bdi></p>
+      <div class="grid">
+        <div class="c6 check" id="ckA"></div>
+        <div class="c6 check" id="ckB"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12. PLAN ============ -->
+<section class="band wrap" id="s12">
+  <div class="sec-head"><div class="shield"><bdi>12</bdi></div><div><h2>خطة العمل وتوزيع المهام: سلام، لؤي، مهند، مجد، يوسف</h2><p>المبدأ: الأرقام أولًا في الإكسل، ثم القصة بالعناوين، ثم الشرائح. كل عضو يملك جزءًا ويراجع جزء زميل. تجميد الأرقام الجمعة ظهرًا.</p></div></div>
+  <div class="grid">
+    <div class="card role c4"><span class="badge">سلام · قائد الفريق</span><h3>القصة والتوصية و<bdi>Q4</bdi></h3>
+      <dl><dt>يملك</dt><dd>الـ<bdi>governing thought</bdi>، الملخص التنفيذي، خيارات <bdi>Q4</bdi> والشروط والمخاطر</dd><dt>الإكسل</dt><dd><bdi>Q4_Deal</bdi> (مع مجد)، <bdi>Checks</bdi> النهائية</dd><dt>الشرائح</dt><dd><bdi>1</bdi>، <bdi>9</bdi>، <bdi>10</bdi>، <bdi>11</bdi>، <bdi>12</bdi></dd><dt>أيضًا</dt><dd>حضور <bdi>Q&amp;A 3</bdi>، حسم الخلافات بمعايير، التسليم النهائي</dd><dt>يراجع</dt><dd>عمل يوسف (العرض)</dd></dl></div>
+    <div class="card role c4"><span class="badge">لؤي</span><h3>السوق ورأس المال: <bdi>Q1 + Q2</bdi></h3>
+      <dl><dt>يملك</dt><dd>بناء السوق بطريقتين + التحققات، الـ<bdi>capex</bdi> السنوي والنطاق، "ما لا يشمله الرقم"</dd><dt>الإكسل</dt><dd><bdi>0_Index</bdi>، <bdi>Assumptions</bdi>، <bdi>Q1_Market</bdi>، <bdi>Q2_Capital</bdi></dd><dt>الشرائح</dt><dd><bdi>2</bdi>، <bdi>3</bdi>، <bdi>4</bdi></dd><dt>يراجع</dt><dd>عمل مهند</dd></dl></div>
+    <div class="card role c4"><span class="badge">مهند</span><h3>التشغيل: الـ<bdi>hubs</bdi> والمحطات والخطة</h3>
+      <dl><dt>يملك</dt><dd>انحدار الإيراد/التكلفة والتعادل، % المربحة، قمع المحطات والتعميم الوطني، اختبارات الخطة، بطاقة الممرات</dd><dt>الإكسل</dt><dd><bdi>Hub_Economics</bdi>، <bdi>Station_Screen</bdi>، <bdi>Plan_Test</bdi></dd><dt>الشرائح</dt><dd><bdi>5</bdi>، <bdi>6</bdi></dd><dt>يراجع</dt><dd>عمل مجد</dd></dl></div>
+    <div class="card role c6"><span class="badge">مجد</span><h3>التقييم والصفقة: <bdi>Q3</bdi></h3>
+      <dl><dt>يملك</dt><dd>اختيار المقارن وتبريره، الخصم، مصفوفة الاستخدام × المضاعف، <bdi>pre/post</bdi>، حساب الحصة والتخفيف بعد فجوة <bdi>$770M</bdi>، أرقام الشرائح</dd><dt>الإكسل</dt><dd><bdi>Q3_Valuation</bdi>، <bdi>Q4_Deal</bdi> (مع سلام)</dd><dt>الشرائح</dt><dd><bdi>7</bdi>، <bdi>8</bdi></dd><dt>يراجع</dt><dd>عمل لؤي</dd></dl></div>
+    <div class="card role c6"><span class="badge">يوسف</span><h3>العرض والجودة</h3>
+      <dl><dt>يملك</dt><dd><bdi>Slide master</bdi>، <bdi>Storyboard v0</bdi>، تحويل الرسوم إلى <bdi>native PowerPoint</bdi>، الـ<bdi>source tags</bdi> وأرقام الأسئلة، قائمة التسليم، تسمية الملفات والحجم، اختبار تحديد النص في الـ<bdi>PDF</bdi></dd><dt>الإكسل</dt><dd>تنسيق موحّد وترميز الألوان</dd><dt>الشرائح</dt><dd><bdi>0</bdi>، <bdi>13</bdi>، وتصميم الكل</dd><dt>يراجع</dt><dd>عمل سلام</dd></dl></div>
+
+    <div class="card c12">
+      <h3>الجدول الزمني (<bdi>7–12</bdi> أكتوبر)</h3>
+      <div class="gantt"><div class="g">
+        <div class="gh">العضو</div>
+        <div class="gh">الأربعاء<small><bdi>7 Oct</bdi></small></div><div class="gh">الخميس<small><bdi>8 Oct</bdi></small></div><div class="gh">الجمعة<small><bdi>9 Oct</bdi></small></div><div class="gh">السبت<small><bdi>10 Oct</bdi></small></div><div class="gh">الأحد<small><bdi>11 Oct</bdi></small></div><div class="gh">الاثنين<small><bdi>12 Oct</bdi></small></div>
+
+        <div class="who">سلام<small>القائد · القصة و<bdi>Q4</bdi></small></div>
+        <div><div class="bar am">قراءة الدليل + توزيع المهام + <bdi>Q&amp;A 3</bdi> الساعة <bdi>5</bdi>م</div></div>
+        <div><div class="bar">خيارات <bdi>Q4</bdi> + الشروط (مسودة)</div></div>
+        <div><div class="bar am">اجتماع الـ<bdi>storyline</bdi> + الملخص التنفيذي</div></div>
+        <div><div class="bar">شرائح <bdi>Q4</bdi> والمخاطر</div></div>
+        <div><div class="bar gd">مراجعة بعين الجمهور</div></div>
+        <div><div class="bar rd">قراءة نهائية + تسليم قبل <bdi>6</bdi>م</div></div>
+
+        <div class="who">لؤي<small><bdi>Q1 + Q2</bdi></small></div>
+        <div><div class="bar">هيكل الإكسل + <bdi>Assumptions + Q1</bdi></div></div>
+        <div><div class="bar"><bdi>Q2</bdi> + الجدول السنوي</div></div>
+        <div><div class="bar am">تجميد أرقام <bdi>Q1/Q2</bdi> ظهرًا</div></div>
+        <div><div class="bar">شرائح <bdi>2–4</bdi></div></div>
+        <div><div class="bar gd">مراجعة عمل مهند</div></div>
+        <div><div class="bar gd"><bdi>Checks</bdi></div></div>
+
+        <div class="who">مهند<small>التشغيل</small></div>
+        <div><div class="bar"><bdi>Hub economics</bdi> + التعادل</div></div>
+        <div><div class="bar"><bdi>Station screen + Plan test</bdi></div></div>
+        <div><div class="bar am">بطاقة الممرات + تجميد</div></div>
+        <div><div class="bar">شرائح <bdi>5–6</bdi></div></div>
+        <div><div class="bar gd">مراجعة عمل مجد</div></div>
+        <div><div class="bar gd"><bdi>Checks</bdi></div></div>
+
+        <div class="who">مجد<small><bdi>Q3</bdi></small></div>
+        <div><div class="bar">المقارنات + السلسلة الأساسية</div></div>
+        <div><div class="bar">المصفوفة + <bdi>pre/post</bdi> + التخفيف</div></div>
+        <div><div class="bar am">تجميد القيمة والحصة</div></div>
+        <div><div class="bar">شرائح <bdi>7–8</bdi></div></div>
+        <div><div class="bar gd">مراجعة عمل لؤي</div></div>
+        <div><div class="bar gd"><bdi>Checks</bdi></div></div>
+
+        <div class="who">يوسف<small>العرض والجودة</small></div>
+        <div><div class="bar"><bdi>Slide master + Storyboard v0</bdi></div></div>
+        <div><div class="bar">قوالب الرسوم الأصلية</div></div>
+        <div><div class="bar am">يفتح رابط التسليم: اختبار الرفع</div></div>
+        <div><div class="bar">تجميع العرض <bdi>v1</bdi></div></div>
+        <div><div class="bar gd">قائمة التسليم + الحجم + <bdi>PDF</bdi></div></div>
+        <div><div class="bar rd">تصدير نهائي + تسمية</div></div>
+      </div></div>
+      <div class="legend-dots" style="margin-top:10px"><span><i style="background:var(--accent)"></i>بناء</span><span><i style="background:var(--amber)"></i>محطة فريق أو تجميد</span><span><i style="background:var(--good)"></i>مراجعة</span><span><i style="background:var(--bad)"></i>تسليم</span></div>
+    </div>
+    <div class="card c4"><h4>طقوس يومية</h4><ul class="small"><li>اجتماع <bdi>15</bdi> دقيقة كل مساء: ماذا أنجزت، ماذا أحتاج، ما الذي يعيقني.</li><li>ملف إكسل واحد مشترك، وكل عضو يعمل في تبويباته فقط.</li><li>أي رقم يتغير بعد التجميد يُبلَّغ في المجموعة فورًا.</li></ul></div>
+    <div class="card c4"><h4>تعريف "منجز"</h4><ul class="small"><li>كل رقم في الشريحة له خلية في الإكسل ومصدر.</li><li>العنوان جملة استنتاج تمر بالـ<bdi>acid test</bdi>.</li><li>زميل راجعه ووقّع عليه.</li></ul></div>
+    <div class="card c4"><h4>الاعتماديات</h4><ul class="small"><li><bdi>Q3</bdi> يحتاج إيراد السنة <bdi>5</bdi> ونتائج الـ<bdi>hubs</bdi> (مهند ← مجد).</li><li><bdi>Q4</bdi> يحتاج <bdi>Q2</bdi> والقيمة والممرات (لؤي، مهند، مجد ← سلام).</li><li>الشرائح تحتاج الأرقام المجمّدة (الكل ← يوسف).</li></ul></div>
+  </div>
+</section>
+
+<!-- ============ 13. DEFENSE + TRAPS ============ -->
+<section class="band wrap" id="s13">
+  <div class="sec-head"><div class="shield"><bdi>13</bdi></div><div><h2>أسئلة صعبة متوقعة، والفخاخ</h2><p>جهّزوا ردًّا من سطرين لكل سؤال. إن وصلنا لأفضل <bdi>50</bdi> سنعرض الحالة نفسها افتراضيًا.</p></div></div>
+  <div class="grid">
+    <div class="c7" id="faq"></div>
+    <div class="card c5">
+      <h3>فخاخ يجب تجنّبها</h3>
+      <ul class="small">
+        <li>مضاعفة الرحلات للعودة الفارغة، أو <bdi>trucks/day</bdi> كأسطول.</li>
+        <li>إدخال الشحن في <bdi>Q1</bdi> أو طرح الـ<bdi>850</bdi> من السوق.</li>
+        <li>تكليف <bdi>45</bdi> أو <bdi>50 hub</bdi> جديدة بدل <bdi>40</bdi>.</li>
+        <li>شراء الـ<bdi>850</bdi> من جديد، أو <bdi>3,600</bdi> شاحنة جديدة.</li>
+        <li>الخلط بين <bdi>$600M (post)</bdi> و<bdi>$480M (pre)</bdi>.</li>
+        <li>خصم لمرة واحدة بدل <bdi>12%</bdi> سنويًا لخمس سنوات.</li>
+        <li>تطبيق الخُمس على مبلغ الاستثمار بدل المضاعف.</li>
+        <li>أخذ متوسط المضاعفات الخمسة آليًا.</li>
+        <li>القول إن <bdi>H-01..H-05</bdi> هي <bdi>hubs Rakiza</bdi>.</li>
+        <li>اختراع ديون أو أسعار <bdi>kWh</bdi> أو أطوال عقود كحقائق.</li>
+        <li>أرقام من الإنترنت، رسوم كصور، أكثر من <bdi>14</bdi> شريحة.</li>
+        <li>نسيان رقم السؤال أعلى اليمين، أو إفصاح <bdi>AI</bdi>.</li>
+        <li>دقة زائفة: "<bdi>$887.5M</bdi>" في العرض بدل "<bdi>~$890M</bdi>".</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 14. GLOSSARY + SOURCES ============ -->
+<section class="band wrap" id="s14">
+  <div class="sec-head"><div class="shield"><bdi>14</bdi></div><div><h2>مسرد المصطلحات وملفات النصوص</h2><p>للأعضاء غير المتخصصين في المالية، ثم قائمة الفيديوهات المفرّغة كاملة.</p></div></div>
+  <div class="grid">
+    <div class="c6" id="gloss"></div>
+    <div class="card c6">
+      <h3>الفيديوهات المفرّغة (<bdi>9</bdi> ملفات، <bdi>14.4</bdi> ساعة)</h3>
+      <p class="small muted">كل ملف ‎.<bdi>md</bdi>‎ بنفس اسم الفيديو وفي نفس مجلده، مع توقيت لكل فقرة. التفريغ آلي <bdi>(Whisper)</bdi>؛ قد ترد أخطاء في أسماء الأشخاص.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>الفيديو</th><th class="n"><bdi>Duration</bdi></th><th>الأهمية</th><th>أبرز ما فيه</th></tr></thead>
+        <tbody>
+          <tr><td><bdi>Case Briefing · Sept 21</bdi></td><td class="n"><bdi>1:14:41</bdi></td><td><span class="tag good">عالية جدًا</span></td><td>شرح كل <bdi>Exhibit</bdi> وتلميحات الحل</td></tr>
+          <tr><td><bdi>Q&amp;A Session 1 · Sept 28</bdi></td><td class="n"><bdi>1:00:52</bdi></td><td><span class="tag good">عالية جدًا</span></td><td>أحكام <bdi>Q1–Q4</bdi>، النموذج المصغّر، <bdi>180</bdi></td></tr>
+          <tr><td><bdi>Q&amp;A Session 2 · Sept 30</bdi></td><td class="n"><bdi>0:40:54</bdi></td><td><span class="tag good">عالية جدًا</span></td><td><bdi>40 hub</bdi>، <bdi>post-money</bdi>، <bdi>exit multiple</bdi></td></tr>
+          <tr><td><bdi>4. Market &amp; Commercial DD · Sept 20</bdi></td><td class="n"><bdi>3:24:37</bdi></td><td><span class="tag good">عالية جدًا</span></td><td>حالة <bdi>ChargeFlow</bdi> المطابقة تقريبًا</td></tr>
+          <tr><td><bdi>2. Problem Structuring · Sept 14</bdi></td><td class="n"><bdi>1:59:53</bdi></td><td><span class="tag warn">متوسطة</span></td><td>الفرضيات، <bdi>MECE</bdi>، الهرم</td></tr>
+          <tr><td><bdi>6. Crafting Powerful Presentation · Oct 5</bdi></td><td class="n"><bdi>1:19:44</bdi></td><td><span class="tag warn">متوسطة</span></td><td><bdi>Storyboard</bdi>، العناوين، الأسلوب</td></tr>
+          <tr><td><bdi>5. Responsible use of AI · Sept 27</bdi></td><td class="n"><bdi>1:34:07</bdi></td><td><span class="tag warn">متوسطة</span></td><td>سياسة <bdi>AI</bdi> والإفصاح</td></tr>
+          <tr><td><bdi>3. Data Analysis with Excel · Sept 16</bdi></td><td class="n"><bdi>2:02:20</bdi></td><td><span class="tag">منخفضة</span></td><td>دوال وأنواع رسوم</td></tr>
+          <tr><td><bdi>1. Program Overview · Sept 13</bdi></td><td class="n"><bdi>1:09:07</bdi></td><td><span class="tag">منخفضة</span></td><td>إداري ومعايير التقييم</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">المصادر الأخرى: <bdi>Round 1 Case Brief (PDF</bdi>، <bdi>23</bdi> صفحة)، <bdi>Round 1 Case Exhibits (Excel)</bdi>، <bdi>Q&amp;A Session 1</bdi> و<bdi>2 (PDF)</bdi>.</p>
+    </div>
+  </div>
+
+<!-- ============ 15. SOURCE AUDIT ============ -->
+<section class="band wrap" id="s15">
+  <div class="sec-head"><div class="shield"><bdi>15</bdi></div><div><h2>تدقيق المصادر: من أين جاء كل رقم؟</h2><p>المنظّمون منعوا أي معلومة خارجية. راجعنا كل رقم ونسبة واسم في هذا الدليل مقابل ملف الحالة والإكسل وملفّي الـ<bdi>Q&amp;A</bdi> والنصوص المفرّغة، وأعدنا حساب كل رقم مشتق. لا يوجد في الدليل رقم من خارج هذه المصادر.</p></div></div>
+  <div class="grid">
+    <div class="card c4"><h3><span class="tag good">مصدر مباشر</span></h3><p class="small">رقم مكتوب حرفيًا في الحالة أو الإكسل أو الـ<bdi>Q&amp;A</bdi>. يُستخدم كما هو مع <bdi>source tag</bdi>.</p></div>
+    <div class="card c4"><h3><span class="tag q">مشتق بحساب</span></h3><p class="small">ناتج حساب من أرقام الحالة فقط. يجب أن تظهر معادلته في ملف الإكسل.</p></div>
+    <div class="card c4"><h3><span class="tag warn">افتراض أو رأي فريق</span></h3><p class="small">اختيار أو استنتاج للفريق. يُكتب في العرض "<bdi>Team assumption</bdi>" مع حساسية إن كان مؤثرًا.</p></div>
+    <div class="card c12">
+      <div class="tbl"><table>
+        <thead><tr><th>الرقم في الدليل</th><th>القيمة</th><th>النوع</th><th>المصدر أو طريقة الحساب</th></tr></thead>
+        <tbody>
+          <tr><td>الشحنة السنوية، الحمولة، الرحلة، المسافة السنوية</td><td class="n"><bdi>300M t · 25 t · 600 km · 120,000 km</bdi></td><td><span class="tag good">مصدر مباشر</span></td><td><bdi>Ex. 1a + Market notes</bdi></td></tr>
+          <tr><td>التأجير، أسعار الشاحنات، الطاقة</td><td class="n"><bdi>$55k · $250k / $150k · $0.28 / $0.14 per km · 1.5 kWh/km</bdi></td><td><span class="tag good">مصدر مباشر</span></td><td><bdi>Ex. 1a</bdi>، <bdi>Ex. 4</bdi>، <bdi>Market notes</bdi></td></tr>
+          <tr><td>حد التفوق على الديزل، تكلفة الـ<bdi>hub</bdi></td><td class="n"><bdi>140–170k km · $4–6M</bdi></td><td><span class="tag good">مصدر مباشر</span></td><td><bdi>Ex. 4</bdi>، <bdi>Ex. 1b</bdi>، <bdi>Market notes</bdi></td></tr>
+          <tr><td>شاحنات الممرات وشحنتها ومسافاتها وجودة العودة والشبكة</td><td class="n"><bdi>6 corridors · 300M t</bdi></td><td><span class="tag good">مصدر مباشر</span></td><td><bdi>Data room · Route activity</bdi></td></tr>
+          <tr><td>خطة الإدارة</td><td class="n"><bdi>1,200</bdi>→<bdi>3,600 trucks · 8</bdi>→<bdi>45 hubs · $90M</bdi>→<bdi>$361M</bdi></td><td><span class="tag good">مصدر مباشر</span></td><td><bdi>Data room · Management plan</bdi>، <bdi>Ex. 5</bdi></td></tr>
+          <tr><td>جولات التمويل الخمس</td><td class="n"><bdi>Changlu $250M / 25% / $410M</bdi> …</td><td><span class="tag good">مصدر مباشر</span></td><td><bdi>Market notes</bdi>، <bdi>Ex. 8 (Meridian = $900M</bdi> حسب <bdi>Q&amp;A 1</bdi>)</td></tr>
+          <tr><td>مخاوف اللجنة وتكلفة رأس المال</td><td class="n"><bdi>one fifth · 12%</bdi></td><td><span class="tag good">مصدر مباشر</span></td><td><bdi>Ex. 7</bdi></td></tr>
+          <tr><td>عتبة التدفق الثابت</td><td class="n"><bdi>180 trucks/day</bdi></td><td><span class="tag good">مصدر مباشر</span></td><td><bdi>Q&amp;A 1 (PDF</bdi> + فيديو <bdi>00:30</bdi>)</td></tr>
+          <tr><td>عدد الـ<bdi>hubs</bdi> الجديدة، <bdi>Pre/Post</bdi></td><td class="n"><bdi>40 new · $600M post / $480M pre</bdi></td><td><span class="tag good">مصدر مباشر</span></td><td><bdi>Q&amp;A 2 (PDF</bdi> + فيديو)</td></tr>
+          <tr><td>حجم السوق</td><td class="n"><bdi>60,000 / 59,733 trucks · $3.30B / $3.29B</bdi></td><td><span class="tag q">مشتق</span></td><td><bdi>300M ÷ 25 × 600 ÷ 120,000 × $55k</bdi>؛ والممرات مجمّعة</td></tr>
+          <tr><td>متوسطات الفواتير</td><td class="n"><bdi>120,453 km · $54,990</bdi> · σ <bdi>$392 · max 140,123</bdi></td><td><span class="tag q">مشتق</span></td><td><bdi>Fleet invoices</bdi>: مجموع <bdi>12</bdi> شهرًا لكل شاحنة</td></tr>
+          <tr><td>الاستثمار</td><td class="n"><bdi>$687.5M + $200M = $887.5M (range $847.5–927.5M)</bdi></td><td><span class="tag q">مشتق</span></td><td><bdi>(3,600 − 850) × $250k</bdi>؛ <bdi>(45 − 5) × $4–6M</bdi></td></tr>
+          <tr><td>السنة <bdi>1</bdi> والفجوة</td><td class="n"><bdi>$102.5M · 13.5% · $767.5M</bdi></td><td><span class="tag q">مشتق</span></td><td><bdi>350 × $250k + 3 × $5M</bdi>؛ <bdi>120 ÷ 887.5</bdi>؛ <bdi>887.5 − 120</bdi></td></tr>
+          <tr><td>اقتصاديات الـ<bdi>hub</bdi></td><td class="n"><bdi>BE 60.1% · $52.2k/pt · $2.62M + $8.3k/pt</bdi></td><td><span class="tag q">مشتق</span></td><td>خط مستقيم على <bdi>240</bdi> مشاهدة شهرية <bdi>(Hub monthly records × 12)</bdi></td></tr>
+          <tr><td>الـ<bdi>hubs</bdi> المربحة واستخدام الممرات</td><td class="n"><bdi>10 / 20 · 86 / 79 / 70 / 56 / 41%</bdi></td><td><span class="tag q">مشتق</span></td><td>متوسطات <bdi>12</bdi> شهرًا لكل <bdi>hub</bdi> ولكل ممر</td></tr>
+          <tr><td>فرز المحطات</td><td class="n"><bdi>120</bdi> → <bdi>35</bdi> → <bdi>24</bdi> → <bdi>17 · Qafila 1 / 22 · gap 159–186</bdi></td><td><span class="tag q">مشتق</span></td><td><bdi>Station audit</bdi> بالشروط الأربعة</td></tr>
+          <tr><td>ما تفترضه الخطة</td><td class="n"><bdi>~70% (~81% avg hubs) · lease Y5 $181.5M avg fleet</bdi></td><td><span class="tag q">مشتق</span></td><td><bdi>$163M ÷ 45</bdi> ثم معادلة الإيراد؛ <bdi>(3,000 + 3,600) ÷ 2 × $55k</bdi></td></tr>
+          <tr><td>المضاعف والقيمة</td><td class="n"><bdi>2.44x · 2.0x · $722M · ÷1.762 · ~$410M</bdi></td><td><span class="tag q">مشتق</span></td><td><bdi>$1,000M ÷ $410M</bdi>؛ × <bdi>0.8</bdi>؛ × <bdi>$361M</bdi>؛ ÷ <bdi>1.12⁵</bdi></td></tr>
+          <tr><td>الحصة العادلة</td><td class="n"><bdi>~23% · or 20% for ~$100M</bdi></td><td><span class="tag q">مشتق</span></td><td><bdi>120 ÷ (400 + 120)</bdi>؛ عند <bdi>$400M pre</bdi></td></tr>
+          <tr><td>إجمالي محطات المملكة والمواقع المؤهلة</td><td class="n"><bdi>~8,000 · ~1,130</bdi></td><td><span class="tag warn">مشتق بافتراض</span></td><td><bdi>72 ÷ (14.5% − 13.6%)</bdi>، بافتراض ثبات إجمالي المحطات؛ × <bdi>17/120</bdi></td></tr>
+          <tr><td>طاقة أسطول <bdi>Rakiza</bdi> مقابل خطة الشحن</td><td class="n"><bdi>~$55M vs $163M (~3x)</bdi></td><td><span class="tag warn">استنتاج فريق</span></td><td><bdi>3,300 × 120,000 × $0.14</bdi>، بافتراض أن طاقة الأسطول كلها تُشترى من <bdi>hubs Rakiza</bdi></td></tr>
+          <tr><td>هامش التأجير للشاحنة</td><td class="n"><bdi>~$15–18k · ~6–7%</bdi></td><td><span class="tag warn">استنتاج فريق</span></td><td><bdi>$55k × 27–33% (high-20s</bdi> إلى <bdi>low-30s) ÷ $250k</bdi></td></tr>
+          <tr><td>صفوف المصفوفة <bdi>1.80x</bdi> و<bdi>2.20x</bdi> وسيناريوهات <bdi>60–80%</bdi></td><td class="n"><bdi>sensitivity</bdi></td><td><span class="tag warn">افتراض فريق</span></td><td>نطاق حساسية حول الحالة المركزية</td></tr>
+          <tr><td>التوصية والشروط والشرائح وتسلسل الممرات</td><td class="n"><bdi>$400M pre · $60M + $60M</bdi></td><td><span class="tag warn">رأي فريق</span></td><td>مبنية على الأرقام أعلاه؛ الحالة تسمح بشروطنا الخاصة (<bdi>Q&amp;A 1</bdi> و<bdi>2</bdi>)</td></tr>
+          <tr><td>معايير التقييم ومسار البطولة</td><td class="n"><bdi>~20% / ~20% · 2,000</bdi> → <bdi>200</bdi> → <bdi>50</bdi> → <bdi>20</bdi></td><td><span class="tag good">مصدر مباشر</span></td><td><bdi>Program Overview</bdi>، <bdi>Q&amp;A 1</bdi>، ورشة العرض (فيديو)</td></tr>
+          <tr><td>أرقام ورشة الـ<bdi>DD</bdi></td><td class="n"><bdi>45% for SAR 60M · 41 / 9 / 14 sites · 26 + 18</bdi></td><td><span class="tag good">مصدر مباشر</span></td><td>فيديو <bdi>Market &amp; Commercial DD</bdi> (حالة تدريبية، ليست حالتنا)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card c6">
+      <h3>ما عدّلناه في هذه المراجعة</h3>
+      <ul class="small">
+        <li>أثر التأجير على متوسط الأسطول: من "<bdi>~$18–20M</bdi>" إلى <b><bdi>~$17–21M</bdi></b> لكل خانة.</li>
+        <li>"نسخة الفريق" بالاستخدام الفعلي: من "<bdi>~$340M</bdi>" إلى <b><bdi>~$370M</bdi></b> (أو <bdi>~$345M</bdi> إذا حُسب الشحن على متوسط عدد الـ<bdi>hubs</bdi>).</li>
+        <li><bdi>Riyadh to Jeddah</bdi> ليس الأطول؛ "<bdi>Other long-haul routes</bdi>" أطول (<bdi>1,300</bdi> كم).</li>
+        <li>حذف مصطلحين لا يردان في المصادر: "<bdi>Minto</bdi>" و"<bdi>Sum-of-the-parts</bdi>".</li>
+        <li>وسم الاستنتاجات بوضوح: إجمالي المحطات، طاقة الأسطول، هامش التأجير.</li>
+      </ul>
+    </div>
+    <div class="card c6">
+      <h3>تنبيهات للاستخدام في العرض</h3>
+      <ul class="small">
+        <li>أسماء مقدّمي الورش (<bdi>Manal</bdi>، <bdi>Laura Jebson</bdi>، <bdi>Lujain</bdi>، <bdi>Selma Afif</bdi>، <bdi>Pablo Delgado</bdi>) مأخوذة من الصوت وقد يختلف إملاؤها. لا تحتاجونها في التسليم.</li>
+        <li>أسماء الشركات والصحف (<bdi>Rakiza</bdi>، <bdi>Qafila</bdi>، <bdi>Changlu</bdi>، <bdi>Handa</bdi>، <bdi>Vardhan</bdi>، <bdi>Meridian</bdi>، <bdi>Solvia</bdi>، <bdi>Gulf Commercial Review</bdi>، <bdi>Corridor &amp; Cargo Weekly</bdi>، <bdi>Frontier Energy Review</bdi>) كلها من الحالة.</li>
+        <li><bdi>Saudi Green Initiative</bdi> ورد في <bdi>Q&amp;A 2</bdi> كسياق نوعي مسموح في <bdi>Q4</bdi> فقط، بلا أرقام.</li>
+        <li>المصطلحات المالية (<bdi>pro-rata</bdi>، <bdi>anti-dilution</bdi>، <bdi>earn-out</bdi>، <bdi>follow-on</bdi>) وردت في الـ<bdi>Q&amp;A</bdi> وورشة الـ<bdi>DD</bdi>.</li>
+        <li>كل رقم "مشتق" يجب أن تظهر معادلته في الإكسل، وكل "افتراض" يُكتب "<bdi>Team assumption</bdi>" في العرض.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="wrap">
+  <p>دليل داخلي للفريق، أُعدّ من مواد الحالة والبرنامج فقط. الأرقام نقطة انطلاق للنقاش وتُعتمد بعد بنائها في ملف الإكسل الخاص بالفريق.</p>
+</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const D = {"routes":[{"corr":"Dammam to Riyadh","t":90.0,"km":400,"ret":"Good","grid":"Adequate","tpd":4200,"trucks":12000,"mkt":660.0},{"corr":"Riyadh to Jeddah","t":70.0,"km":950,"ret":"Mixed","grid":"Weak","tpd":2600,"trucks":22167,"mkt":1219.2},{"corr":"Other long-haul routes","t":45.0,"km":1300,"ret":"Mixed","grid":"Weak","tpd":900,"trucks":19500,"mkt":1072.5},{"corr":"Riyadh to Qassim","t":40.0,"km":330,"ret":"Poor","grid":"Adequate","tpd":1500,"trucks":4400,"mkt":242.0},{"corr":"Dammam to Jubail","t":30.0,"km":100,"ret":"Good","grid":"Strong","tpd":3000,"trucks":1000,"mkt":55.0},{"corr":"Jeddah to Makkah","t":25.0,"km":80,"ret":"Good","grid":"Adequate","tpd":1800,"trucks":667,"mkt":36.7}],"trucks":[{"id":"RK-1012","corr":"Jeddah to Makkah","km":101820,"lease":54820},{"id":"RK-1011","corr":"Jeddah to Makkah","km":104962,"lease":54989},{"id":"RK-1017","corr":"Jeddah to Makkah","km":111840,"lease":55528},{"id":"RK-1019","corr":"Riyadh to Qassim","km":112760,"lease":54421},{"id":"RK-1020","corr":"Other long-haul routes","km":115398,"lease":55253},{"id":"RK-1013","corr":"Riyadh to Qassim","km":116338,"lease":55717},{"id":"RK-1007","corr":"Dammam to Riyadh","km":116411,"lease":55254},{"id":"RK-1005","corr":"Riyadh to Jeddah","km":117733,"lease":54627},{"id":"RK-1015","corr":"Dammam to Riyadh","km":118583,"lease":55514},{"id":"RK-1002","corr":"Riyadh to Jeddah","km":120971,"lease":54540},{"id":"RK-1004","corr":"Dammam to Jubail","km":121020,"lease":54896},{"id":"RK-1003","corr":"Dammam to Jubail","km":122143,"lease":55059},{"id":"RK-1009","corr":"Riyadh to Jeddah","km":124502,"lease":55037},{"id":"RK-1014","corr":"Riyadh to Qassim","km":124781,"lease":55356},{"id":"RK-1018","corr":"Jeddah to Makkah","km":124911,"lease":54649},{"id":"RK-1008","corr":"Dammam to Jubail","km":125708,"lease":54962},{"id":"RK-1010","corr":"Dammam to Jubail","km":125784,"lease":54892},{"id":"RK-1016","corr":"Riyadh to Jeddah","km":128394,"lease":54451},{"id":"RK-1001","corr":"Riyadh to Qassim","km":134881,"lease":55370},{"id":"RK-1006","corr":"Dammam to Riyadh","km":140123,"lease":54457}],"inv_stats":{"avg_km":120453,"avg_lease":54990,"sd_lease":392,"max_km":140123,"min_km":101820},"hubs":[{"hub":"H-01","corr":"Dammam to Riyadh","util":35.6,"rev":1.85,"cost":2.93,"profit":-1.07},{"hub":"H-02","corr":"Dammam to Riyadh","util":38.4,"rev":1.99,"cost":2.95,"profit":-0.95},{"hub":"H-03","corr":"Dammam to Riyadh","util":35.9,"rev":1.86,"cost":2.92,"profit":-1.06},{"hub":"H-04","corr":"Dammam to Riyadh","util":43.4,"rev":2.24,"cost":3.01,"profit":-0.77},{"hub":"H-05","corr":"Dammam to Riyadh","util":44.0,"rev":2.28,"cost":2.97,"profit":-0.7},{"hub":"H-06","corr":"Dammam to Riyadh","util":50.6,"rev":2.63,"cost":3.05,"profit":-0.42},{"hub":"H-07","corr":"Dammam to Jubail","util":50.1,"rev":2.62,"cost":3.04,"profit":-0.41},{"hub":"H-08","corr":"Dammam to Jubail","util":49.1,"rev":2.56,"cost":3.04,"profit":-0.48},{"hub":"H-09","corr":"Dammam to Jubail","util":57.3,"rev":2.96,"cost":3.09,"profit":-0.13},{"hub":"H-10","corr":"Dammam to Jubail","util":59.4,"rev":3.07,"cost":3.12,"profit":-0.05},{"hub":"H-11","corr":"Dammam to Jubail","util":66.0,"rev":3.44,"cost":3.18,"profit":0.26},{"hub":"H-12","corr":"Riyadh to Jeddah","util":65.3,"rev":3.38,"cost":3.16,"profit":0.22},{"hub":"H-13","corr":"Riyadh to Jeddah","util":68.0,"rev":3.55,"cost":3.22,"profit":0.33},{"hub":"H-14","corr":"Riyadh to Jeddah","util":71.6,"rev":3.7,"cost":3.21,"profit":0.48},{"hub":"H-15","corr":"Riyadh to Jeddah","util":75.0,"rev":3.91,"cost":3.25,"profit":0.66},{"hub":"H-16","corr":"Riyadh to Qassim","util":76.3,"rev":3.95,"cost":3.26,"profit":0.69},{"hub":"H-17","corr":"Riyadh to Qassim","util":79.5,"rev":4.12,"cost":3.29,"profit":0.83},{"hub":"H-18","corr":"Riyadh to Qassim","util":80.0,"rev":4.17,"cost":3.29,"profit":0.88},{"hub":"H-19","corr":"Jeddah to Makkah","util":85.7,"rev":4.51,"cost":3.36,"profit":1.16},{"hub":"H-20","corr":"Jeddah to Makkah","util":86.1,"rev":4.47,"cost":3.3,"profit":1.16}],"hub_points":[[31.8,1.66,2.91],[33.6,1.72,2.93],[36.9,1.93,2.93],[37.1,1.94,2.93],[36.4,1.97,2.92],[36.4,1.86,2.94],[32.6,1.71,2.91],[33.6,1.75,2.99],[38.1,1.94,2.92],[38.1,1.91,2.85],[37.5,2.03,2.95],[34.8,1.81,2.96],[34.8,1.77,2.67],[36.9,1.93,2.91],[40.5,2.13,3.1],[39.4,2.12,2.99],[39.2,2.01,2.99],[36.8,1.92,2.96],[36.6,1.92,2.93],[38.6,2.02,2.87],[39.3,2.05,3.02],[41.5,2.05,2.99],[40.3,2.05,2.98],[36.8,1.95,2.93],[34.9,1.84,2.89],[32.2,1.69,2.86],[36.6,1.89,2.99],[37.3,1.92,2.95],[36.9,1.83,2.96],[34.2,1.79,2.9],[33.2,1.69,2.86],[37.8,2.04,2.85],[35.6,1.83,2.91],[38.9,2.01,2.96],[38.4,2.01,2.92],[35.2,1.8,2.93],[39.4,2.04,2.95],[41.0,2.05,3.0],[41.7,2.16,3.02],[46.7,2.45,3.03],[46.5,2.44,3.0],[42.3,2.17,2.95],[39.2,2.04,3.01],[42.2,2.12,3.04],[46.9,2.42,3.02],[46.7,2.38,3.03],[46.7,2.49,3.06],[41.4,2.08,2.96],[41.3,2.18,2.88],[41.1,2.12,2.96],[44.5,2.26,2.9],[45.7,2.32,3.01],[44.9,2.27,3.1],[43.0,2.22,2.88],[42.8,2.25,3.0],[43.9,2.29,2.93],[45.2,2.35,2.98],[47.8,2.51,2.97],[46.3,2.33,3.03],[41.2,2.21,3.0],[45.5,2.3,3.03],[47.7,2.48,2.97],[50.9,2.66,3.01],[52.6,2.72,3.06],[53.0,2.7,3.04],[49.0,2.6,3.06],[49.1,2.56,2.97],[48.5,2.58,3.06],[51.4,2.66,3.17],[55.6,2.89,3.18],[55.2,2.79,3.02],[49.1,2.65,3.0],[46.1,2.33,3.04],[47.3,2.41,3.0],[51.0,2.62,2.92],[54.2,3.0,3.22],[51.7,2.68,3.1],[47.3,2.49,2.94],[48.3,2.61,3.08],[49.6,2.59,3.1],[50.0,2.66,2.97],[54.2,2.83,3.03],[53.6,2.78,3.07],[47.6,2.5,3.0],[49.7,2.58,3.07],[44.0,2.29,2.89],[49.4,2.54,3.09],[50.4,2.68,3.12],[50.7,2.65,3.1],[48.9,2.55,3.12],[46.5,2.56,3.03],[48.5,2.52,3.02],[49.5,2.52,2.93],[51.1,2.68,3.04],[52.3,2.61,3.13],[48.6,2.57,2.93],[53.5,2.71,3.04],[54.4,2.77,3.07],[59.9,3.1,3.11],[56.5,2.9,3.09],[60.4,3.08,3.11],[58.6,3.11,3.06],[53.6,2.83,3.08],[55.1,2.88,3.11],[55.6,2.87,3.04],[62.6,3.16,3.16],[61.7,3.27,3.16],[55.7,2.84,3.03],[55.4,2.84,3.05],[54.9,2.91,2.98],[61.0,3.21,3.24],[64.3,3.35,3.19],[60.6,3.1,3.23],[57.1,3.05,3.07],[56.9,2.94,3.1],[56.0,2.82,3.12],[62.4,3.16,3.11],[59.9,3.08,3.11],[65.1,3.32,3.16],[59.1,3.02,3.04],[58.9,3.09,3.17],[62.7,3.25,3.11],[65.7,3.34,3.18],[72.2,3.67,3.25],[68.7,3.62,3.15],[63.9,3.29,3.18],[65.5,3.57,3.28],[62.7,3.3,3.05],[67.6,3.45,3.16],[70.9,3.63,3.26],[70.1,3.73,3.17],[63.4,3.31,3.14],[59.1,3.0,3.1],[60.7,3.13,3.1],[66.2,3.5,3.26],[67.6,3.49,3.22],[68.4,3.57,3.22],[62.5,3.15,3.14],[64.4,3.35,3.17],[63.1,3.17,3.08],[67.9,3.7,3.15],[72.4,3.71,3.19],[67.6,3.47,3.16],[63.9,3.33,3.13],[60.9,3.15,3.14],[64.8,3.35,3.25],[67.7,3.47,3.3],[73.4,3.75,3.25],[71.3,3.69,3.2],[68.8,3.77,3.2],[62.7,3.2,3.12],[66.0,3.46,3.25],[73.5,3.72,3.28],[70.0,3.75,3.23],[72.0,3.91,3.27],[65.5,3.4,3.21],[64.7,3.38,3.15],[70.7,3.62,3.11],[71.6,3.74,3.27],[75.3,3.93,3.17],[73.6,3.88,3.28],[72.4,3.71,3.14],[66.9,3.33,3.14],[69.9,3.57,3.26],[78.8,4.11,3.27],[74.9,3.95,3.37],[72.3,3.63,3.24],[68.4,3.5,3.15],[66.7,3.62,3.21],[74.0,3.83,3.24],[76.0,3.93,3.27],[73.0,3.93,3.26],[79.6,4.08,3.23],[74.5,3.93,3.24],[70.8,3.77,3.24],[71.8,3.7,3.2],[78.3,4.11,3.22],[81.6,4.12,3.33],[81.2,4.11,3.32],[72.3,3.74,3.2],[70.5,3.65,3.32],[72.9,3.84,3.18],[75.9,3.9,3.23],[76.0,3.8,3.23],[79.9,4.12,3.37],[74.4,3.9,3.24],[71.2,3.66,3.14],[75.3,3.92,3.25],[81.4,4.26,3.25],[86.7,4.56,3.47],[76.2,4.03,3.33],[74.9,3.79,3.11],[76.2,3.92,3.35],[77.2,4.14,3.15],[79.0,3.96,3.24],[80.5,4.18,3.23],[81.5,4.23,3.24],[79.1,4.12,3.3],[75.9,3.96,3.24],[77.2,4.01,3.33],[82.5,4.3,3.37],[88.4,4.59,3.31],[82.5,4.17,3.43],[73.4,3.82,3.26],[74.7,3.87,3.36],[75.2,3.93,3.27],[84.3,4.31,3.29],[81.4,4.35,3.24],[84.5,4.46,3.43],[75.4,3.96,3.27],[74.4,3.91,3.16],[75.7,3.9,3.27],[85.7,4.56,3.29],[88.5,4.59,3.34],[83.9,4.37,3.33],[75.7,3.82,3.17],[77.0,4.02,3.15],[81.1,4.22,3.35],[89.1,4.78,3.36],[93.4,4.79,3.55],[84.5,4.42,3.21],[84.2,4.45,3.35],[80.4,4.27,3.33],[78.6,4.21,3.32],[94.0,5.2,3.4],[92.8,4.86,3.48],[89.8,4.56,3.4],[83.2,4.36,3.39],[78.0,3.96,3.21],[80.3,4.01,3.28],[89.3,4.8,3.19],[94.4,4.76,3.32],[84.5,4.47,3.24],[84.4,4.33,3.33],[83.4,4.46,3.39],[81.2,4.27,3.17],[89.1,4.75,3.35],[90.0,4.48,3.4],[93.6,4.97,3.42],[84.7,4.32,3.34]],"hub_corr":[{"corr":"Dammam to Jubail","hubs":5,"util":56.4,"profit":-0.16},{"corr":"Dammam to Riyadh","hubs":6,"util":41.3,"profit":-0.83},{"corr":"Jeddah to Makkah","hubs":2,"util":85.9,"profit":1.16},{"corr":"Riyadh to Jeddah","hubs":4,"util":70.0,"profit":0.42},{"corr":"Riyadh to Qassim","hubs":3,"util":78.6,"profit":0.8}],"hub_month":[{"m":"2025-01","util":56.0},{"m":"2025-02","util":57.6},{"m":"2025-03","util":61.9},{"m":"2025-04","util":63.6},{"m":"2025-05","util":62.8},{"m":"2025-06","util":59.7},{"m":"2025-07","util":57.7},{"m":"2025-08","util":58.8},{"m":"2025-09","util":63.6},{"m":"2025-10","util":65.6},{"m":"2025-11","util":64.3},{"m":"2025-12","util":58.7}],"hub_fit":{"rs":0.0522,"ri":-0.016,"cs":0.0083,"ci":2.623,"be":60.1,"rps":480},"funnel":[120,17,17,17,17],"kva800":35,"land_yes":62,"turn_yes":52,"st_op":[{"op":"Qafila","n":22,"q":1},{"op":"National A","n":18,"q":3},{"op":"National B","n":15,"q":2},{"op":"Regional","n":25,"q":4},{"op":"Independent","n":40,"q":7}],"st_area":[{"a":"Jeddah to Makkah","n":19,"q":5},{"a":"Riyadh to Qassim","n":14,"q":6},{"a":"Dammam to Jubail","n":12,"q":4},{"a":"Riyadh city","n":11,"q":0},{"a":"Tabuk area","n":8,"q":0},{"a":"Dammam to Riyadh","n":8,"q":2},{"a":"Hail area","n":7,"q":0},{"a":"Madinah area","n":7,"q":0},{"a":"Abha area","n":6,"q":0},{"a":"Riyadh to Jeddah","n":6,"q":0},{"a":"Dammam city","n":5,"q":0},{"a":"Makkah area","n":5,"q":0},{"a":"Remote spur","n":4,"q":0},{"a":"Jeddah city","n":4,"q":0},{"a":"Secondary road","n":4,"q":0}],"st_q":[{"id":"S-2061","op":"Independent","area":"Dammam to Riyadh","tpd":513,"kva":1500,"note":"new canopy added 2024"},{"id":"S-2035","op":"Regional","area":"Jeddah to Makkah","tpd":507,"kva":1250,"note":"popular rest halt"},{"id":"S-2033","op":"Independent","area":"Dammam to Jubail","tpd":507,"kva":1000,"note":"new canopy added 2024"},{"id":"S-2113","op":"Independent","area":"Dammam to Jubail","tpd":503,"kva":1500,"note":"popular rest halt"},{"id":"S-2001","op":"Independent","area":"Dammam to Jubail","tpd":499,"kva":1500,"note":"popular rest halt"},{"id":"S-2066","op":"Independent","area":"Dammam to Riyadh","tpd":449,"kva":2000,"note":"new canopy added 2024"},{"id":"S-2055","op":"National A","area":"Riyadh to Qassim","tpd":425,"kva":1250,"note":"new canopy added 2024"},{"id":"S-2090","op":"Regional","area":"Jeddah to Makkah","tpd":389,"kva":2000,"note":"favoured truck stop"},{"id":"S-2030","op":"Regional","area":"Jeddah to Makkah","tpd":356,"kva":1000,"note":"large forecourt"},{"id":"S-2082","op":"National B","area":"Jeddah to Makkah","tpd":354,"kva":2000,"note":"busy through the night"},{"id":"S-2036","op":"Independent","area":"Riyadh to Qassim","tpd":345,"kva":1250,"note":"favoured truck stop"},{"id":"S-2079","op":"Independent","area":"Jeddah to Makkah","tpd":341,"kva":1500,"note":"large forecourt"},{"id":"S-2024","op":"National B","area":"Dammam to Jubail","tpd":305,"kva":1500,"note":"busy through the night"},{"id":"S-2006","op":"National A","area":"Riyadh to Qassim","tpd":232,"kva":2000,"note":"busy through the night"},{"id":"S-2120","op":"National A","area":"Riyadh to Qassim","tpd":221,"kva":1250,"note":"large forecourt"},{"id":"S-2081","op":"Regional","area":"Riyadh to Qassim","tpd":195,"kva":1000,"note":"popular rest halt"},{"id":"S-2059","op":"Qafila","area":"Riyadh to Qassim","tpd":186,"kva":2000,"note":"large forecourt"}],"st_charging_today":1,"plan":[{"y":1,"trucks":1200,"hubs":8,"lease":66,"chg":24},{"y":2,"trucks":1700,"hubs":12,"lease":91,"chg":42},{"y":3,"trucks":2400,"hubs":20,"lease":121,"chg":70},{"y":4,"trucks":3000,"hubs":32,"lease":157,"chg":110},{"y":5,"trucks":3600,"hubs":45,"lease":198,"chg":163}],"comps":[{"n":"Changlu","c":"China","biz":"Leases trucks + runs charging","inv":250,"stake":0.25,"rev":410,"post":1000,"mult":2.44,"pre_mult":1.83},{"n":"Handa","c":"China","biz":"Charging only","inv":165,"stake":0.3,"rev":180,"post":550,"mult":3.06,"pre_mult":2.14},{"n":"Vardhan","c":"India","biz":"Diesel & electric leasing","inv":190,"stake":0.4,"rev":520,"post":475,"mult":0.91,"pre_mult":0.55},{"n":"Meridian","c":"—","biz":"Diversified logistics","inv":150,"stake":0.2,"rev":900,"post":750,"mult":0.83,"pre_mult":0.67},{"n":"Solvia","c":"Europe","biz":"Electric vans","inv":175,"stake":0.35,"rev":240,"post":500,"mult":2.08,"pre_mult":1.35}]};
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const RUN = /[+−~≈±≥≤(]?[A-Za-z0-9$€£#¹²³⁰⁴⁵⁶⁷⁸⁹](?:[A-Za-z0-9$€£#%.,×÷=+\-−–\/:'’&_≈~±·≥≤<>¹²³⁰⁴⁵⁶⁷⁸⁹ ()]*[A-Za-z0-9%$)¹²³⁰⁴⁵⁶⁷⁸⁹])?/g;
+const cnt = (t,c) => t.split(c).length - 1;
+function trimRun(t){ let lead = 0; while (t.startsWith('(') && cnt(t,'(') > cnt(t,')')) { t = t.slice(1); lead++; } while (t.endsWith(')') && cnt(t,'(') < cnt(t,')')) t = t.slice(0,-1).trimEnd(); return [t, lead]; }
+function bidiWrap(root){
+  if (!root) return;
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode:n => { const p = n.parentElement; if (!p || p.closest('script,style,pre,bdi,option,canvas,.n')) return NodeFilter.FILTER_REJECT; return /[A-Za-z0-9]/.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; }});
+  const nodes = []; while (w.nextNode()) nodes.push(w.currentNode);
+  nodes.forEach(n => { const t = n.nodeValue; let last = 0, m; const frag = document.createDocumentFragment(); RUN.lastIndex = 0;
+    while ((m = RUN.exec(t))) { const [run, lead] = trimRun(m[0]); if (!/[A-Za-z0-9]/.test(run)) continue; const at = m.index + lead; frag.append(t.slice(last, at)); const b = document.createElement('bdi'); b.textContent = run; frag.append(b); last = at + run.length; RUN.lastIndex = last; }
+    if (last) { frag.append(t.slice(last)); n.replaceWith(frag); } });
+}
+const fmt = (n, d=0) => Number(n).toLocaleString('en-US', {minimumFractionDigits:d, maximumFractionDigits:d});
+
+/* ---------- static tables ---------- */
+(function tables(){
+  $('#tbRoutes').innerHTML = D.routes.map(r => `<tr><td>${esc(r.corr)}</td><td class="n">${fmt(r.t)}</td><td class="n">${fmt(r.km)}</td><td>${r.ret}</td><td>${r.grid}</td><td class="n">${fmt(r.tpd)}</td><td class="n">${fmt(r.trucks)}</td><td class="n">${fmt(r.mkt)}</td></tr>`).join('')
+    + `<tr class="total"><td>Total</td><td class="n">300</td><td class="n">597 avg</td><td></td><td></td><td></td><td class="n">${fmt(D.routes.reduce((a,r)=>a+r.trucks,0))}</td><td class="n">${fmt(D.routes.reduce((a,r)=>a+r.mkt,0))}</td></tr>`;
+  $('#tbStations').innerHTML = D.st_q.map(s => `<tr><td class="n">${s.id}</td><td>${esc(s.op)}</td><td>${esc(s.area)}</td><td class="n">${s.tpd}</td><td class="n">${fmt(s.kva)}</td><td class="small">${esc(s.note)}</td></tr>`).join('');
+  $('#tbStArea').innerHTML = D.st_area.map(a => `<tr${a.q? ' class="hl"':''}><td>${esc(a.a)}</td><td class="n">${a.n}</td><td class="n">${a.q}</td></tr>`).join('');
+  const rel = {Changlu:'<span class="tag good">الأقرب</span>', Handa:'<span class="tag warn">شحن فقط</span>', Vardhan:'<span class="tag warn">تأجير فقط</span>', Meridian:'<span class="tag bad">غير ذي صلة</span>', Solvia:'<span class="tag bad">فانات</span>'};
+  $('#tbComps').innerHTML = D.comps.map(c => `<tr${c.n==='Changlu'?' class="hl"':''}><td>${c.n} <span class="muted small">(${c.c})</span></td><td class="small">${esc(c.biz)}</td><td class="n">$${c.inv}M</td><td class="n">${Math.round(c.stake*100)}%</td><td class="n">$${fmt(c.post)}M</td><td class="n">$${c.rev}M</td><td class="n">${c.mult.toFixed(2)}x</td><td>${rel[c.n]}</td></tr>`).join('');
+  ['#tbRoutes','#tbStations','#tbStArea','#tbComps'].forEach(x => bidiWrap($(x)));
+})();
+
+/* ---------- clues ---------- */
+const CLUES = [
+ ['Q4','الشاحنة لا تتفوق على الديزل عند الاستخدام الفعلي','الفواتير: 120k كم سنويًا، والحد اللازم 140–170k. التوفير $16,800/سنة مقابل فرق سعر $100k.','الطلب على التأجير الكهربائي غير تلقائي؛ القيمة للعميل في الخدمة الكاملة وتقارير الانبعاثات.'],
+ ['Q3','الـhub تتعادل عند 60%، ونصف العيّنة خاسرة','10 من 20 فوق التعادل؛ عند 70% الربح ~$0.43M على $5M (~9% < 12%).','الشحن يربح فقط في المواقع المزدحمة جدًا؛ المال يجب أن يتبع الاستخدام.'],
+ ['Q3','الخطة تحتاج ~70% في كل hub','$163M ÷ 45 = $3.62M/hub ⇐ ~70%، أو ~81% على متوسط عدد الـhubs.','كل hub جديدة يجب أن تكون ضمن أفضل ~35% من العيّنة.'],
+ ['Q3','الشحن يعتمد على شاحنات لا توجد بعد','أسطول Rakiza ينفق ~$55M طاقة في السنة 5 (3,300 × 120,000 كم × $0.14)، والخطة $163M (~3x). استنتاج الفريق.','الخطة تفترض آلاف الشاحنات الكهربائية لطرف ثالث في سوق "شبه لا كهربائي اليوم".'],
+ ['Q3','إيراد التأجير محسوب على رصيد نهاية السنة','السنة 1 = 1,200 × $55k والسنة 5 = 3,600 × $55k بالضبط.','على متوسط الأسطول: السنة 5 = $181.5M بدل $198M، وهذا يمس قيمة الخروج.'],
+ ['Q4','"أفضل ممر للبدء" هو الأسوأ في البيانات','كل hubs العيّنة على Dammam to Riyadh خاسرة (35–51%).','لا يجوز القول إنها hubs Rakiza، لكن الأدلة لا تدعم ادعاء الممر.'],
+ ['Q4','محطات Qafila ضعيفة كمواقع hubs','1 من 22 مؤهلة (4.5%) مقابل 14% للسوق.','جواب سؤال اللجنة "ماذا ندفع مقابله؟": Qafila تحتاج خبرة Rakiza، وRakiza تحتاج أساطيل Qafila.'],
+ ['Q4','المواقع ليست نادرة','~8,000 محطة × 14.2% ≈ 1,130 موقعًا مؤهلًا مقابل 45 hub.','خندق "أفضل المواقع" ضعيف؛ المنافس يستطيع البناء بجانبك (Ex. 2).'],
+ ['Q3','عتبة 180 مخفية في البيانات','لا محطة بين 159 و186 شاحنة/يوم، وكل من فوق 180 يحقق باقي الشروط.','تأكيد أن الفرز صحيح، ويُذكر كدليل على قراءة دقيقة للبيانات.'],
+ ['Q2','$120M تغطي السنة الأولى فقط','Capex السنة 1 = $102.5M من $888M.','فجوة ~$770M ⇐ تخفيف ما لم تُشترط حقوق المتابعة.'],
+ ['Q4','تهديدات تنافسية حقيقية','صانع صيني بمعيار شحن خاص + شركة مرتبطة بالدولة (Ex. 1c، Market notes).','"First mover is the only one who wins" ادعاء يُختبر لا يُسلَّم به.'],
+ ['Q4','الأصل الدائم دفتر التأجير','Ex. 2؛ انحراف الفاتورة السنوية $392 فقط بين الشاحنات.','قيمة Rakiza الأكثر ثباتًا في العقود، والشحن هو الـupside المتقلب.'],
+ ['Q4','تمويل الشاحنات بحقوق ملكية مكلف','هامش التأجير عند النضج ~30% قبل التمويل ⇐ ~$15–18k/شاحنة على $250k (~6–7%)، رأي الفريق.','الشاحنات (77% من الـcapex) تناسبها ديون أصول أرخص من 12%.'],
+ ['Q4','تحوّط وتعارض لدى Qafila','كل شاحنة كهربائية تتوقف عن شراء ديزل Qafila، وQafila توزع شاحنات ديزل.','الاستثمار رهان على المستقبل ضد جزء من الحاضر، يُطرح كتحوّط مقصود.'],
+ ['Q1','أرقام مشتتة غير لازمة','السكان 35M، شبكة الطرق 70,000 كم، حصة محطات Qafila.','"إذا لم تُعطَ بيانات فافترضوا أنها غير لازمة"، وتجاهل المشتتات دليل حكم جيد.'],
+];
+$('#clues').innerHTML = CLUES.map((c,i) => `<div class="card c4"><h3><span class="tag q">${c[0]}</span><span class="tag">#${i+1}</span> ${esc(c[1])}</h3><p class="small"><b>الدليل:</b> ${esc(c[2])}</p><p class="small"><b>المعنى:</b> ${esc(c[3])}</p></div>`).join('');
+bidiWrap($('#clues'));
+
+/* ---------- FAQ ---------- */
+const FAQ = [
+ ['لماذا لم تأخذوا متوسط المضاعفات الخمسة؟','لأن Changlu الوحيد الذي يؤجر شاحنات ويشغّل شحنًا مثل Rakiza. Meridian لوجستيات متنوعة وSolvia فانات. ورشة الـDD قالت إن المتوسط هو الإحصاء الخطأ. والآخرون يُستخدمون كتحقق إضافي يقيّم كل نشاط بمضاعف مقارنه.'],
+ ['لماذا 40 hub وليس 45؟','الـ45 إجمالي يشمل الـ5 التجريبية الموجودة، وتحويلها مهمل التكلفة حسب Q&A 2.'],
+ ['لماذا لا يشمل Q1 الشحن ولا العودة الفارغة؟','قواعد الحالة: سوق التأجير فقط، من الشحنة التي تتحرك، دون مضاعفة للعودة.'],
+ ['قيمتكم أقل من الطلب، فلماذا توصون بالاستثمار؟','لأن السوق حقيقي والتوافق الاستراتيجي قوي، والمشكلة في السعر والتوقيت. نعالجها بتقييم أقل وشرائح مرتبطة بالاستخدام وحماية من التخفيف.'],
+ ['لماذا خصم الخُمس على المضاعف وليس على المبلغ؟','لأن لجنة Qafila تخفّض المعايير الأجنبية (Ex. 7)، والـQ&A حسم أنه لا يُطبَّق على مبلغ الـ$120M.'],
+ ['هل افترضتم أن H-01 إلى H-05 هي hubs Rakiza؟','لا. عاملنا العيّنة كمتوسط سوق، ونقول فقط إن الأدلة لا تدعم ادعاء الممر.'],
+ ['لماذا لم تبنوا DCF كاملًا؟','لشركة نمو تكون التدفقات سالبة سنوات، والمنظّمون فضّلوا exit multiple. يمكن عرض DCF كتحقق فقط مع افتراضات معنونة.'],
+ ['ماذا لو ارتفع الاستخدام إلى 80%؟','القيمة ~$437M عند 2.0x، وما زالت أقل من $480M. لا تُبلغ إلا عند 2.2x و80%.'],
+];
+$('#faq').innerHTML = FAQ.map(f => `<details><summary>${esc(f[0])}</summary><p class="small">${esc(f[1])}</p></details>`).join('');
+bidiWrap($('#faq'));
+
+/* ---------- glossary ---------- */
+const GL = [
+ ['Pre-money / Post-money','قيمة الشركة قبل/بعد دخول المال الجديد. Post = Pre + الاستثمار. الحصة = الاستثمار ÷ Post.'],
+ ['Exit multiple','القيمة ÷ الإيراد (أو EBITDA) في صفقة مقارنة، يُطبَّق على إيراد السنة 5 لتقدير قيمة الخروج.'],
+ ['Discounting 12%','قيمة اليوم = قيمة المستقبل ÷ (1.12)^سنوات. خمس سنوات = ÷ 1.762.'],
+ ['Utilization','نسبة ما يُستخدم من الطاقة القصوى للـhub. 100 شاحنة من سعة 200 = 50%.'],
+ ['Break-even','نقطة تساوي الإيراد والتكلفة: ~60% استخدام للـhub.'],
+ ['Capex','إنفاق رأسمالي لمرة واحدة على أصول: شاحنات وhubs.'],
+ ['Dilution','انخفاض نسبة المستثمر عند دخول مال جديد لا يشارك فيه.'],
+ ['Pro-rata / Follow-on','حق المستثمر في المشاركة في الجولات القادمة للحفاظ على نسبته.'],
+ ['Tranche / Earn-out','دفع الاستثمار على دفعات مشروطة بتحقيق أهداف قابلة للقياس.'],
+ ['TCO','التكلفة الكلية للملكية: شراء + طاقة + صيانة… (لا تطلب الحالة نموذجًا كاملًا).'],
+ ['TAM / SAM / SOM','السوق الكلي / القابل للخدمة / القابل للحصول. غير مطلوب في Q1.'],
+ ['MECE','تقسيم بلا تداخل ويغطي كل الاحتمالات.'],
+];
+$('#gloss').innerHTML = `<div class="tbl"><table><thead><tr><th>المصطلح</th><th>المعنى المختصر</th></tr></thead><tbody>${GL.map(g=>`<tr><td class="n" style="text-align:right;direction:ltr">${esc(g[0])}</td><td class="small">${esc(g[1])}</td></tr>`).join('')}</tbody></table></div>`;
+bidiWrap($('#gloss'));
+
+/* ---------- checklist ---------- */
+const CK_A = ['غلاف عليه Team ID بصيغة CC-####','شريحة شكر أخيرة','8–12 شريحة بين الغلاف والشكر (14 كحد أقصى)','الشريحة 1 ملخص تنفيذي يتضمن التوصية','الأسئلة الأربعة مجابة بالترتيب','رقم السؤال أعلى يمين كل شريحة تجيبه','رسوم وجداول native قابلة للتعديل، لا صور','Source tags أسفل يسار كل رقم أو رسم','إفصاح استخدام AI','العناوين جمل استنتاج تمر بالـacid test'];
+const CK_B = ['الإكسل يحمل كل الحسابات ويطابق كل رقم في العرض','تبويب Index + Assumptions مع المصادر','لا hard-coding في الحسابات','PDF باسم CC-XXXX_Round1_Presentation','Excel باسم CC-XXXX_Round1_Analysis','كل ملف أقل من 10MB','النص قابل للتحديد في الـPDF','اللغة إنجليزية','الملفان يُرفعان معًا مرة واحدة قبل 12 أكتوبر 23:59'];
+function store(k,v){try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v);}catch(e){return null}}
+function renderChecks(){
+  const make = (arr, pre) => arr.map((t,i) => { const id = pre+i; const on = store('ck_'+id)==='1'; return `<label for="${id}"><input type="checkbox" id="${id}" ${on?'checked':''}><span>${esc(t)}</span></label>`; }).join('');
+  $('#ckA').innerHTML = make(CK_A,'cka'); $('#ckB').innerHTML = make(CK_B,'ckb');
+  const upd = () => { const all = document.querySelectorAll('#ckA input,#ckB input'); const done = [...all].filter(x=>x.checked).length; $('#ckBar').style.width = (done/all.length*100)+'%'; $('#ckTxt').textContent = `${done} من ${all.length} منجز`; };
+  document.querySelectorAll('#ckA input,#ckB input').forEach(x => x.addEventListener('change', () => { store('ck_'+x.id, x.checked?'1':'0'); upd(); }));
+  upd(); bidiWrap($('#ckA')); bidiWrap($('#ckB'));
+}
+renderChecks();
+
+/* ---------- copy ---------- */
+$('#copyAi').addEventListener('click', e => {
+  const t = $('#aiTpl').textContent, b = e.currentTarget;
+  const sel = () => { const r = document.createRange(); r.selectNodeContents($('#aiTpl')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'النص محدد، انسخه يدويًا'; };
+  try { navigator.clipboard.writeText(t).then(() => { b.textContent = 'تم النسخ'; setTimeout(()=>b.textContent='نسخ النص',1800); }, sel); } catch(err) { sel(); }
+});
+
+/* ---------- countdown ---------- */
+function countdown(){
+  document.querySelectorAll('[data-cd]').forEach(el => {
+    const ms = new Date(el.dataset.cd) - new Date();
+    if (ms <= 0) { el.textContent = 'انتهى'; return; }
+    const d = Math.floor(ms/864e5), h = Math.floor(ms%864e5/36e5), m = Math.floor(ms%36e5/6e4);
+    el.textContent = d ? `بعد ${d} يوم و${h} ساعة` : `بعد ${h} ساعة و${m} دقيقة`;
+  });
+}
+countdown(); setInterval(countdown, 60000);
+
+/* ---------- valuation math ---------- */
+const F = D.hub_fit;
+const chgRev = u => 45 * (F.rs*u + F.ri);
+function value(u, mult, mk, lease, r){ const rev = lease + chgRev(u); const exitV = mult*(1-mk/100)*rev; return {chg:chgRev(u), rev, exitV, pv: exitV/Math.pow(1+r/100,5)}; }
+
+/* ---------- charts ---------- */
+let charts = [];
+const tok = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function alpha(c,a){ const d = document.createElement('canvas').getContext('2d'); d.fillStyle = c; const h = d.fillStyle; if (h.startsWith('#')) { const n = parseInt(h.slice(1),16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; } return h.replace('rgb(','rgba(').replace(')',`,${a})`); }
+const refPlugin = { id:'ref', afterDraw(c, args, o){ const {ctx, chartArea:a, scales} = c; if (!o) return; ctx.save();
+  (o.yband||[]).forEach(b => { const y1 = scales.y.getPixelForValue(b.from), y2 = scales.y.getPixelForValue(b.to); ctx.fillStyle = b.color; ctx.fillRect(a.left, Math.min(y1,y2), a.right-a.left, Math.abs(y2-y1)); if (b.label){ ctx.fillStyle = b.text; ctx.font = '12px '+tok('--body'); ctx.textAlign='left'; ctx.fillText(b.label, a.left+6, Math.min(y1,y2)+14);} });
+  (o.y||[]).forEach(l => { const y = scales.y.getPixelForValue(l.v); ctx.strokeStyle = l.color; ctx.setLineDash(l.dash||[6,4]); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(a.left,y); ctx.lineTo(a.right,y); ctx.stroke(); if (l.label){ ctx.setLineDash([]); ctx.fillStyle = l.color; ctx.font = '12px '+tok('--body'); ctx.textAlign='right'; ctx.fillText(l.label, a.right-4, y-5);} });
+  (o.x||[]).forEach(l => { const x = scales.x.getPixelForValue(l.v); ctx.strokeStyle = l.color; ctx.setLineDash(l.dash||[6,4]); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x,a.top); ctx.lineTo(x,a.bottom); ctx.stroke(); if (l.label){ ctx.setLineDash([]); ctx.fillStyle = l.color; ctx.font = '12px '+tok('--body'); ctx.textAlign = l.align||'left'; ctx.fillText(l.label, x+(l.align==='right'?-5:5), a.top+14);} });
+  ctx.restore(); } };
+
+function build(){
+  charts.forEach(c => c.destroy()); charts = [];
+  const C = {accent:tok('--accent'), amber:tok('--amber'), ink:tok('--ink'), muted:tok('--muted'), line:tok('--line'), good:tok('--good'), bad:tok('--bad'), warn:tok('--warn'), surface:tok('--surface')};
+  Chart.defaults.font.family = tok('--body'); Chart.defaults.font.size = 12; Chart.defaults.color = C.muted; Chart.defaults.borderColor = C.line;
+  Chart.defaults.plugins.legend.labels.boxWidth = 12; Chart.defaults.maintainAspectRatio = false; Chart.defaults.animation = matchMedia('(prefers-reduced-motion: reduce)').matches ? false : {duration:500};
+  const grid = {color:alpha(C.line,.7)}; const mk = (id, cfg) => { const el = document.getElementById(id); if (el) charts.push(new Chart(el, cfg)); };
+  const money = v => '$'+fmt(v)+'M';
+
+  mk('chFunnelComp', {type:'bar', data:{labels:['Submissions','Top 200','Top 50 (virtual)','Top 20 (Dhahran)'], datasets:[{data:[2000,200,50,20], backgroundColor:[alpha(C.accent,.35),alpha(C.accent,.55),alpha(C.accent,.8),C.amber], borderRadius:4}]}, options:{indexAxis:'y', plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>fmt(c.raw)+' teams'}}}, scales:{x:{type:'logarithmic', grid, ticks:{callback:v=>[20,50,200,2000].includes(v)?fmt(v):''}}, y:{grid:{display:false}}}}});
+
+  const rs = [...D.routes].sort((a,b)=>b.trucks-a.trucks);
+  mk('chRoutes', {type:'bar', data:{labels:rs.map(r=>r.corr), datasets:[{label:'Trucks needed', data:rs.map(r=>r.trucks), backgroundColor:rs.map(r=>r.grid==='Weak'?alpha(C.amber,.85):C.accent), borderRadius:4}]}, options:{indexAxis:'y', plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>{const r=rs[c.dataIndex]; return [`${fmt(r.trucks)} trucks · $${fmt(r.mkt)}M/yr`, `${fmt(r.t)} Mt · ${r.km} km · grid ${r.grid}`];}}}}, scales:{x:{grid, ticks:{callback:v=>fmt(v)}}, y:{grid:{display:false}}}}});
+
+  mk('chTrucks', {type:'bar', data:{labels:D.trucks.map(t=>t.id), datasets:[{label:'km / year', data:D.trucks.map(t=>t.km), backgroundColor:D.trucks.map(t=>t.km>=140000?C.good:C.accent), borderRadius:3}]}, options:{plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>{const t=D.trucks[c.dataIndex]; return [`${fmt(t.km)} km`, `${t.corr}`, `Lease $${fmt(t.lease)}`];}}}, ref:{yband:[{from:140000,to:170000,color:alpha(C.good,.13),label:'140–170k: beats diesel', text:C.good}], y:[{v:120000,color:C.amber,label:'Case: 120,000 km'}]}}, scales:{y:{min:90000,max:175000, grid, ticks:{callback:v=>fmt(v/1000)+'k'}}, x:{grid:{display:false}, ticks:{maxRotation:90,minRotation:60,font:{size:10}}}}}, plugins:[refPlugin]});
+
+  const xs = [35,95];
+  mk('chHubScatter', {type:'scatter', data:{datasets:[
+    {label:'Revenue', data:D.hub_points.map(p=>({x:p[0],y:p[1]})), backgroundColor:alpha(C.accent,.55), pointRadius:3},
+    {label:'Cost', data:D.hub_points.map(p=>({x:p[0],y:p[2]})), backgroundColor:alpha(C.amber,.55), pointRadius:3},
+    {type:'line', label:'Revenue fit', data:xs.map(x=>({x,y:F.rs*x+F.ri})), borderColor:C.accent, borderWidth:2, pointRadius:0},
+    {type:'line', label:'Cost fit', data:xs.map(x=>({x,y:F.cs*x+F.ci})), borderColor:C.amber, borderWidth:2, pointRadius:0}]},
+    options:{plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.x.toFixed(1)}% → $${c.parsed.y.toFixed(2)}M/yr`}}, ref:{x:[{v:F.be,color:C.bad,label:'Break-even 60%',align:'right'},{v:70,color:C.ink,label:'Plan needs ~70%'}]}},
+      scales:{x:{min:30,max:96, grid, title:{display:true,text:'Utilization (%)'}}, y:{grid, title:{display:true,text:'$M per year (annualised)'}, ticks:{callback:v=>'$'+v+'M'}}}}, plugins:[refPlugin]});
+
+  const hs = [...D.hubs].sort((a,b)=>a.util-b.util);
+  mk('chHubProfit', {type:'bar', data:{labels:hs.map(h=>h.hub), datasets:[{label:'Profit $M', data:hs.map(h=>h.profit), backgroundColor:hs.map(h=>h.profit>=0?C.good:C.bad), borderRadius:3}]}, options:{plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>{const h=hs[c.dataIndex]; return [`${h.profit>=0?'+':''}${h.profit.toFixed(2)} $M`, `${h.util}% · ${h.corr}`];}}}}, scales:{y:{grid, ticks:{callback:v=>'$'+v+'M'}}, x:{grid:{display:false}, ticks:{font:{size:10}}}}}});
+
+  const hc = [...D.hub_corr].sort((a,b)=>b.util-a.util);
+  mk('chHubCorr', {type:'bar', data:{labels:hc.map(h=>h.corr), datasets:[{label:'Avg utilization', data:hc.map(h=>h.util), backgroundColor:hc.map(h=>h.util>=60?C.good:C.bad), borderRadius:4}]}, options:{indexAxis:'y', plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>{const h=hc[c.dataIndex]; return [`${h.util}% avg · ${h.hubs} hubs`, `Avg profit/hub ${h.profit>=0?'+':''}$${h.profit}M`];}}}, ref:{x:[{v:60,color:C.ink,label:'60%'}]}}, scales:{x:{min:0,max:100, grid, ticks:{callback:v=>v+'%'}}, y:{grid:{display:false}}}}, plugins:[refPlugin]});
+
+  mk('chFunnel', {type:'bar', data:{labels:['Surveyed','Grid ≥ 800 kVA','+ Land to expand','+ Room to turn','+ ≥ 180 trucks/day'], datasets:[{data:[120,35,24,17,17], backgroundColor:[alpha(C.accent,.3),alpha(C.accent,.5),alpha(C.accent,.7),C.accent,C.amber], borderRadius:4}]}, options:{indexAxis:'y', plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>`${c.raw} stations (${(c.raw/120*100).toFixed(1)}%)`}}}, scales:{x:{grid, max:125}, y:{grid:{display:false}}}}});
+
+  mk('chStOp', {type:'bar', data:{labels:D.st_op.map(o=>o.op), datasets:[{label:'Qualify rate', data:D.st_op.map(o=>+(o.q/o.n*100).toFixed(1)), backgroundColor:D.st_op.map(o=>o.op==='Qafila'?C.bad:C.accent), borderRadius:4}]}, options:{plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>{const o=D.st_op[c.dataIndex]; return `${o.q} of ${o.n} qualify (${c.raw}%)`;}}}, ref:{y:[{v:14.2,color:C.amber,label:'All stations 14.2%'}]}}, scales:{y:{grid, max:22, ticks:{callback:v=>v+'%'}}, x:{grid:{display:false}}}}, plugins:[refPlugin]});
+
+  mk('chPlan', {type:'bar', data:{labels:D.plan.map(p=>'Year '+p.y), datasets:[
+    {type:'bar', label:'Leasing $M', data:D.plan.map(p=>p.lease), backgroundColor:C.accent, stack:'r', borderRadius:2, yAxisID:'y'},
+    {type:'bar', label:'Charging $M', data:D.plan.map(p=>p.chg), backgroundColor:alpha(C.accent,.45), stack:'r', borderRadius:2, yAxisID:'y'},
+    {type:'line', label:'Trucks (year end)', data:D.plan.map(p=>p.trucks), borderColor:C.amber, backgroundColor:C.amber, yAxisID:'y2', tension:.25},
+    {type:'line', label:'Hubs ×80 (year end)', data:D.plan.map(p=>p.hubs*80), borderColor:C.ink, backgroundColor:C.ink, borderDash:[5,4], yAxisID:'y2', tension:.25}]},
+    options:{plugins:{legend:{position:'bottom'}, tooltip:{callbacks:{label:c=> c.dataset.label.startsWith('Hubs') ? `Hubs: ${D.plan[c.dataIndex].hubs}` : `${c.dataset.label}: ${fmt(c.raw)}`}}}, scales:{y:{stacked:true, grid, ticks:{callback:v=>'$'+v+'M'}, title:{display:true,text:'Revenue'}}, y2:{position:'right', grid:{display:false}, title:{display:true,text:'Trucks'}, ticks:{callback:v=>fmt(v)}}, x:{grid:{display:false}}}}});
+
+  mk('chComps', {type:'bar', data:{labels:D.comps.map(c=>c.n), datasets:[{label:'Post-money / revenue', data:D.comps.map(c=>c.mult), backgroundColor:D.comps.map(c=>c.n==='Changlu'?C.accent:alpha(C.muted,.45)), borderRadius:4}]}, options:{plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>{const x=D.comps[c.dataIndex]; return [`${x.mult.toFixed(2)}x post / revenue`, `${x.biz}`];}}}, ref:{y:[{v:2.0,color:C.amber,label:'Changlu × 0.8 = 2.0x'}]}}, scales:{y:{grid, ticks:{callback:v=>v+'x'}}, x:{grid:{display:false}}}}, plugins:[refPlugin]});
+
+  mk('chQ1', {type:'bar', data:{labels:['Method 1 · Market notes','Method 2 · Corridors'], datasets:[{label:'Trucks', data:[60000, D.routes.reduce((a,r)=>a+r.trucks,0)], backgroundColor:[C.accent,alpha(C.accent,.6)], borderRadius:4}]}, options:{plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>`${fmt(c.raw)} trucks · $${(c.raw*0.055/1000).toFixed(2)}B`}}}, scales:{y:{grid, beginAtZero:true, ticks:{callback:v=>fmt(v/1000)+'k'}}, x:{grid:{display:false}}}}});
+
+  mk('chWaterfall', {type:'bar', data:{labels:['Trucks 2,750 × $250k','Hubs 40 × $5M','Gross requirement','Qafila ask','Remaining gap'], datasets:[{data:[[0,687.5],[687.5,887.5],[0,887.5],[0,120],[120,887.5]], backgroundColor:[C.accent,alpha(C.accent,.55),C.ink,C.amber,alpha(C.bad,.75)], borderRadius:4, borderSkipped:false}]}, options:{plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>{const v=c.raw; return money(v[1]-v[0]);}}}}, scales:{y:{grid, beginAtZero:true, ticks:{callback:v=>'$'+v+'M'}}, x:{grid:{display:false}}}}});
+
+  const cy = [{t:87.5,h:15},{t:125,h:20},{t:175,h:40},{t:150,h:60},{t:150,h:65}];
+  mk('chCapexYear', {type:'bar', data:{labels:['Y1','Y2','Y3','Y4','Y5'], datasets:[{label:'Trucks', data:cy.map(x=>x.t), backgroundColor:C.accent, stack:'c', borderRadius:2},{label:'Hubs', data:cy.map(x=>x.h), backgroundColor:alpha(C.accent,.45), stack:'c', borderRadius:2}]}, options:{plugins:{legend:{position:'bottom'}, ref:{y:[{v:120,color:C.amber,label:'$120M ask'}]}}, scales:{y:{stacked:true, grid, ticks:{callback:v=>'$'+v+'M'}}, x:{stacked:true, grid:{display:false}}}}, plugins:[refPlugin]});
+
+  const us = []; for (let u=35; u<=95; u+=1) us.push(u);
+  mk('chHubEcon', {type:'line', data:{datasets:[
+    {label:'Revenue per hub ($M/yr)', data:us.map(u=>({x:u,y:F.rs*u+F.ri})), borderColor:C.accent, pointRadius:0, borderWidth:2.5},
+    {label:'Cost per hub ($M/yr)', data:us.map(u=>({x:u,y:F.cs*u+F.ci})), borderColor:C.amber, pointRadius:0, borderWidth:2.5},
+    {label:'Profit per hub ($M/yr)', data:us.map(u=>({x:u,y:(F.rs-F.cs)*u+F.ri-F.ci})), borderColor:C.good, pointRadius:0, borderWidth:2, borderDash:[5,4], fill:{target:{value:0}, above:alpha(C.good,.12), below:alpha(C.bad,.12)}}]},
+    options:{interaction:{mode:'index',intersect:false}, plugins:{legend:{position:'bottom'}, tooltip:{callbacks:{title:i=>`Utilization ${i[0].parsed.x}%`, label:c=>`${c.dataset.label}: $${c.parsed.y.toFixed(2)}M`}}, ref:{x:[{v:F.be,color:C.bad,label:'60% break-even',align:'right'},{v:70,color:C.ink,label:'70% plan'}]}},
+      scales:{x:{type:'linear', min:35, max:95, grid, title:{display:true,text:'Utilization (%)'}, ticks:{stepSize:10, callback:v=>v+'%'}}, y:{grid, ticks:{callback:v=>'$'+v+'M'}}}}, plugins:[refPlugin]});
+
+  mk('chCalc', {type:'bar', data:{labels:['Our value (pre)','Rakiza ask (pre)','Rakiza ask (post)'], datasets:[{data:[0,480,600], backgroundColor:[C.accent,C.amber,alpha(C.amber,.45)], borderRadius:4}]}, options:{indexAxis:'y', plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>money(c.raw)}}}, scales:{x:{grid, beginAtZero:true, ticks:{callback:v=>'$'+v+'M'}}, y:{grid:{display:false}}}}});
+  calc();
+}
+
+/* ---------- calculator ---------- */
+function calc(){
+  const u = +$('#inU').value, m = +$('#inM').value, k = +$('#inK').value, l = +$('#inL').value, r = +$('#inR').value, inv = +$('#inI').value;
+  $('#oU').textContent = u+'%'; $('#oM').textContent = m.toFixed(2)+'x'; $('#oK').textContent = k+'%'; $('#oR').textContent = r+'%'; $('#oI').textContent = '$'+inv+'M';
+  const v = value(u,m,k,l,r);
+  $('#rC').textContent = '$'+fmt(v.chg)+'M'; $('#rT').textContent = '$'+fmt(v.rev)+'M'; $('#rE').textContent = '$'+fmt(v.exitV)+'M'; $('#rV').textContent = '$'+fmt(v.pv)+'M';
+  const gap = (v.pv/480-1)*100; $('#rG').textContent = (gap>=0?'+':'')+gap.toFixed(0)+'%';
+  const stake = inv/(v.pv+inv)*100; $('#rS').textContent = stake.toFixed(1)+'%';
+  $('#rNote').textContent = `بتقييم $${fmt(v.pv)}M قبل المال، يشتري $${inv}M حصة ${stake.toFixed(1)}% بعد المال، مقابل 20% في عرض Rakiza. عند ${u}% استخدام ${u<60.1?'تكون الـhubs تحت التعادل وتخسر.':'تكون الـhubs فوق التعادل.'}`;
+  bidiWrap($('#rNote'));
+  const ch = charts.find(c => c.canvas.id==='chCalc'); if (ch){ ch.data.datasets[0].data[0] = Math.round(v.pv); ch.update('none'); }
+}
+['#inU','#inM','#inK','#inL','#inR','#inI'].forEach(s => $(s).addEventListener('input', calc));
+
+function start(){ if (window.Chart) build(); else calc(); }
+start();
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', start); } catch(e){}
+new MutationObserver(start).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+
+/* ---------- pages (one section at a time) ---------- */
+(function router(){
+  const page = document.querySelector('.page');
+  const secs = [...document.querySelectorAll('main > section[id]')];
+  const links = [...document.querySelectorAll('.strip a')];
+  page.classList.add('tabs');
+  function show(id, write){
+    const sec = secs.find(x => x.id === id) || secs[0];
+    secs.forEach(x => x.classList.toggle('active', x === sec));
+    links.forEach(l => l.classList.toggle('on', l.getAttribute('href') === '#'+sec.id));
+    window.scrollTo(0, 0);
+    const on = links.find(l => l.classList.contains('on'));
+    if (on) { try { on.scrollIntoView({block:'nearest', inline:'center'}); } catch(e){} }
+    charts.forEach(c => { if (sec.contains(c.canvas)) c.resize(); });
+    if (write) { try { history.replaceState(null, '', '#'+sec.id); } catch(e){} }
+    store('lastPage', sec.id);
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]'); if (!a) return;
+    const id = a.getAttribute('href').slice(1);
+    if (secs.some(x => x.id === id)) { e.preventDefault(); show(id, true); }
+  });
+  window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,select,textarea') || e.altKey || e.ctrlKey || e.metaKey) return;
+    const i = secs.findIndex(x => x.classList.contains('active'));
+    if (e.key === 'ArrowLeft' && secs[i+1]) show(secs[i+1].id, true);
+    if (e.key === 'ArrowRight' && secs[i-1]) show(secs[i-1].id, true);
+  });
+  const fromHash = location.hash.slice(1);
+  const last = store('lastPage');
+  show(secs.some(x => x.id === fromHash) ? fromHash : (secs.some(x => x.id === last) ? last : 'home'));
+})();
+</script>
+
+</body>
+</html>
